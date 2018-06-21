@@ -1,0 +1,18 @@
+
+
+<ng-container>
+       <div class="wrapper">
+        <div class="sidebar" data-color="red">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="main-panel">
+            <app-navbar></app-navbar>
+            <div class="panel-header panel-header-sm">
+                </div>
+            <router-outlet></router-outlet>
+            <app-spinner *ngIf="spinnerState.count > 0"></app-spinner>
+            <app-footer></app-footer>
+        </div>
+      </div>
+</ng-container>
+        

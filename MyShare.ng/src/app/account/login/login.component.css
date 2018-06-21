@@ -1,0 +1,7 @@
+body {
+    background-color: #00BCD4 !important;
+    padding-left: 0;
+    max-width: 360px;
+    margin: 5% auto;
+    overflow-x: hidden;
+}

@@ -1,0 +1,55 @@
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/home">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a routerLink="/groups">My Groups</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a (click)="onDetails()">{{this.services.sharedData.groupName}}</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Invite</li>
+  </ol>
+</nav>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>
+            <a>{{this.services.sharedData.groupName}}</a>
+          </h5>
+        </div>
+        <div class="card-content">
+          {{this.services.sharedData.groupBio}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
+        <div class="card">
+          <div class="card-content">
+            <div class="form-group row">
+              <label class="col-form-label col-md-1"> Phone </label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" formControlName="txtPhone" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-8 text-center">
+
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <button type="submit" class="btn btn-primary btn-round btn-sm" [disabled]="!inviteForm.valid">Send Invitation</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

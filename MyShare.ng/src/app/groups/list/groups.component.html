@@ -1,0 +1,37 @@
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/home">Home</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">My Groups</li>
+  </ol>
+</nav>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" *ngFor="let group of model.groups">
+        <div class="card-header">
+          <h5 style="display:inline-block">
+            <a (click)="onDetails(group.id,group.name,group.bio)">{{group.name}}</a>
+          </h5>
+          <span *ngIf="group.isAdmin" class="is-admin">group admin</span>
+        </div>
+        <div class="card-content">
+          {{group.bio}}
+        </div>
+        <div class="card-footer text-right">
+          <button *ngIf="group.isAdmin"
+            (click)="onInvite(group.id,group.name,group.bio);" 
+            class="btn btn-primary btn-sm btn-round" style=margin-right:5px;>
+            <i class="now-ui-icons users_single-02"></i>
+            invite
+          </button>
+          <button (click)="onExpenses(group.id,group.name,group.bio);" class="btn btn-primary btn-sm btn-round">expenses</button>
+        </div>
+      </div>
+    </div> 
+  </div>
+  <div class="plus">
+    <button class="btn btn-link btn-sm" type="button" (click)="onAddGroup()">+</button>
+  </div>
+</div>

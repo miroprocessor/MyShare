@@ -1,0 +1,13 @@
+.panel-heading{
+    background-color: #0052ff;
+    border-radius: 5px;
+    padding: 5px;
+}
+.panel-title a{
+    color:#fff;
+}
+button.close-exp{
+    background-color: #c23391;
+    float: right;
+    color:#fff
+}

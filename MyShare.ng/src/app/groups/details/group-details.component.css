@@ -1,0 +1,13 @@
+h4.modal-title{
+  margin-top: 0px;  
+}
+
+.modal-backdrop.fade
+   {
+     opacity: 0.5;
+   }
+   
+   .modal-open .modal
+   {
+     opacity: 1;
+   }

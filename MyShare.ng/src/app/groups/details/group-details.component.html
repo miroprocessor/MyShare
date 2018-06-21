@@ -1,0 +1,74 @@
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/home">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a routerLink="/groups">My Groups</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{model._groupName}}</li>
+  </ol>
+</nav>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>
+            <a>{{model._groupName}}</a>
+          </h5>
+        </div>
+        <div class="card-content">
+          {{model._bio}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" *ngIf="model.showMembers">
+        <div class="card-header">
+          <h6>{{model.members.length}} participants</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let member of model.members">
+                  <td>{{member.name}}</td>
+                  <td class="text-right">
+                    <span class="is-admin" *ngIf="member.isAdmin">group admin</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="plus" *ngIf="model.canInvite">
+    <button class="btn btn-link btn-sm" type="button" (click)="open(content)">+</button>
+  </div>
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">invite new member</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label class="col-form-label col-md-1"> Phone </label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" formControlName="txtPhone" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-sm btn-round" type="button" (click)="onInvite()">invite</button>
+    </div>
+  </ng-template>
+</div>

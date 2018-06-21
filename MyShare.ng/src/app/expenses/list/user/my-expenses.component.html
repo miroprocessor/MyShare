@@ -1,0 +1,70 @@
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/home">Home</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">My Expenses</li>
+  </ol>
+</nav>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-warning text-center" *ngIf="model.groups.length === 0">
+            You don't have opened expenses
+          </div>
+      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor='let group of model.groups'>
+        <ngb-panel title="{{group.name}}">
+          <ng-template ngbPanelContent>
+            <table class="table">
+              <tr>
+                <th>Amount</th>
+                <th>Details</th>
+                <th>Date</th>
+              </tr>
+              <tr *ngFor='let expense of group.expenses'>
+                <td>{{expense.amount}}</td>
+                <td>{{expense.details}}</td>
+                <td>{{expense.spentOn}}</td>
+              </tr>
+            </table>
+            <button *ngIf="group.isAdmin" style="float: right;" class="btn btn-primary btn-round btn-sm" (click)="onClose(group.id,group.name,group.bio)">Close</button>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+  <div class="plus">
+    <button class="btn btn-link btn-sm" type="button" (click)="onAddExpenses()">+</button>
+  </div>
+</div>
+
+<!-- 
+<div class="panel-group" id="myAccordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default" *ngFor='let group of model.groups' style="margin-bottom: 10px;">
+    <div class="panel-heading" role="tab" id="{{group.name}}">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#myAccordion" style="text-decoration: none;" href="#{{group.id}}" aria-expanded="true"
+          attr.aria-controls="{{group.id}}">
+          {{group.name}}
+        </a>
+        <button *ngIf="group.isAdmin" class="btn btn-link close-exp" (click)="onClose(group.id,group.name,group.bio)">Close</button>
+      </h4>
+    </div>
+    <div id="{{group.id}}" class="collapse" role="tabpanel" attr.aria-labelledby="{{group.name}}">
+      <div class="panel-body">
+        <table class="table">
+          <tr>
+            <th>Amount</th>
+            <th>Details</th>
+            <th>Date</th>
+          </tr>
+          <tr *ngFor='let expense of group.expenses'>
+            <td>{{expense.amount}}</td>
+            <td>{{expense.details}}</td>
+            <td>{{expense.spentOn}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> -->
