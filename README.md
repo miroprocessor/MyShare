@@ -10,7 +10,7 @@ Track your and your roommates expenses and calculate the share of each member.
 
 # UI 
 
-Thanks for [Create Tim](https://www.creative-tim.com/), I used [Now UI Dashboard Angular](https://www.creative-tim.com/product/now-ui-dashboard-angular) free template.
+Thanks for [Creative Tim](https://www.creative-tim.com/), I used [Now UI Dashboard Angular](https://www.creative-tim.com/product/now-ui-dashboard-angular) free template.
 
 # Installation
 
