@@ -5,12 +5,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { AngularFireModule } from 'angularfire2'
+import { AngularFirestoreModule } from 'angularfire2/firestore'
+
+import { environment } from '../environments/environment';
 
 import { ComponentsModule } from './shared/components.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
-import { environment } from '../environments/environment';
 import { AuthGuard } from './services/auth-guard.service';
 import { FirebaseFunctions } from './services/firebase.functions';
 import { SpinnerStateService } from './services/spinnerState.service';
@@ -18,6 +21,8 @@ import { DataService } from './services/data.service';
 import { ServicesUnit } from './services/unit.services';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NewNeedComponent } from './needs/add/new-need/new-need.component';
+import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.component';
 
 
 
@@ -35,11 +40,15 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       positionClass: 'toast-top-center',
       preventDuplicates: true,
     }),
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule.enablePersistence()
   ],
   declarations: [
     AppComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    NewNeedComponent,
+    GroupsNeedsComponent
   ],
   providers: [
     FirebaseFunctions,

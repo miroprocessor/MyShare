@@ -1,0 +1,48 @@
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/home">Home</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Our Needs</li>
+  </ol>
+</nav>
+<!-- <div *ngFor="let need of (model.needs)">
+  {{need.description}}
+</div> -->
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor='let group of model.groups'>
+        <ngb-panel title="{{group.name}}">
+          <ng-template ngbPanelContent>
+
+            <div class="alert alert-warning text-center" *ngIf="group.needs &&  group.needs.length === 0">
+              group needs nothing
+            </div>
+            <table class="table" *ngIf="group.needs && group.needs.length > 0">
+              <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Votes</th>
+                <th></th>
+              </tr>
+              <tr *ngFor='let need of group.needs'>
+                <td>{{need.description}}</td>
+                <td>{{need.quantity}}</td>
+                <td>{{need.votes}}
+                  <i class="now-ui-icons ui-2_like" (click)="onLike(group.id,need.id)"></i>
+                </td>
+                <td>
+                  <i class="now-ui-icons ui-1_simple-remove"></i>
+                </td>
+              </tr>
+            </table>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+  <div class="plus">
+    <button class="btn btn-link btn-sm" type="button" (click)="onAddNeeds()">+</button>
+  </div>
+</div>

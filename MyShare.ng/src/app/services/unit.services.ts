@@ -6,6 +6,7 @@ import { FirebaseFunctions } from "./firebase.functions";
 import { AuthGuard } from "./auth-guard.service";
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { AngularFirebaseService } from "./angular.firebase.service";
 
 @Injectable()
 export class ServicesUnit {
@@ -16,15 +17,17 @@ export class ServicesUnit {
   public authGuard: AuthGuard;
   public toastrSevice: ToastrService;
   public modalService: NgbModal;
+  public angularFirebaseService: AngularFirebaseService;
 
   constructor(
     private _route: Router,
     private _spinner: SpinnerStateService,
     private _data: DataService,
     private _firebaseFunctions: FirebaseFunctions,
-    private _authGuard : AuthGuard,
+    private _authGuard: AuthGuard,
     private _toastrService: ToastrService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _angularFirebaseService: AngularFirebaseService
   ) {
     this.route = _route;
     this.spinner = _spinner;
@@ -33,5 +36,6 @@ export class ServicesUnit {
     this.authGuard = _authGuard;
     this.toastrSevice = _toastrService;
     this.modalService = _modalService;
+    this.angularFirebaseService = _angularFirebaseService;
   }
 }

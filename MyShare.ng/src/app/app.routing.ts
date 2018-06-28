@@ -18,6 +18,8 @@ import { InvitationsComponent } from './invitaions/list/invitations.component';
 import { InviteMemberComponent } from './invitaions/invite/invite-member.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
+import { NewNeedComponent } from './needs/add/new-need/new-need.component';
+import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.component';
 
 export const appRoutes: Routes = [
     { path: "home", canActivate: [AuthGuard], component: HomeComponent },
@@ -29,6 +31,9 @@ export const appRoutes: Routes = [
     { path: "expenses/close", canActivate: [AuthGuard], component: CloseComponent },
     { path: "invitations", canActivate: [AuthGuard], component: InvitationsComponent },
     { path: "invitations/invite", canActivate: [AuthGuard], component: InviteMemberComponent },
+
+    { path: "needs", canActivate: [AuthGuard], component: GroupsNeedsComponent },    
+    { path: "needs/new-need", canActivate: [AuthGuard], component: NewNeedComponent },
     
     { path: "account/login", component: LoginComponent },
     { path: "account/register", component: RegisterComponent },

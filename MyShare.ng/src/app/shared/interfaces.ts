@@ -40,3 +40,9 @@ export interface IExpenses {
     spentOn: Date
 }
 
+export interface INeed {
+    quantity: number,
+    description: string,
+    votes: number
+}
+

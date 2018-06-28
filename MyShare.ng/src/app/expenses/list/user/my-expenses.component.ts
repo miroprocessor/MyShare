@@ -12,8 +12,7 @@ export class MyExpensesComponent implements OnInit {
 
   model: MyExpensesModel;
 
-  constructor(private services: ServicesUnit,config: NgbAccordionConfig) {
-    config.closeOthers = true;
+  constructor(private services: ServicesUnit, config: NgbAccordionConfig) {
     config.type = "dark";
     this.model = new MyExpensesModel(services);
   }
@@ -26,7 +25,7 @@ export class MyExpensesComponent implements OnInit {
   }
 
   onClose(groupId: string, groupName: string, groupBio: string) {
-    
+
     this.services.sharedData.set(groupId, groupName, groupBio);
     this.services.route.navigate(['/expenses/close']);
   }

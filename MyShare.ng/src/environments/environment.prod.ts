@@ -1,6 +1,16 @@
 export const environment = {
   production: true,
 
-  //create your firebase project and put its URI here.
-  fireFunctionsUrl:''
+  //create your firebase project and put its configuration and URI here.
+
+  firebase: {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: ""
+  },
+
+  fireFunctionsUrl: ''
 };

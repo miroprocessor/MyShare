@@ -3,7 +3,6 @@ import { IExpenses } from "../../shared/interfaces";
 
 export class SpentModel {
 
-    message: string;
     groups: any[];
 
     amount: number;
@@ -33,12 +32,12 @@ export class SpentModel {
         this.services.firebaseFunctions.addExpenses(expenses)
             .then(function () {
                 that.services.spinner.hide();
-                that.message = 'your expenses is added successfully.'
+                that.services.toastrSevice.success('your expenses is added successfully.');
                 callback();
             })
             .catch(function () {
                 that.services.spinner.hide();
-                that.message = 'error when adding your expenses, try later.'
+                that.services.toastrSevice.error('error when adding your expenses, try later.');
             });
     }
 }

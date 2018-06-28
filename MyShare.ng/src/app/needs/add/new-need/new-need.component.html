@@ -4,7 +4,7 @@
       <a routerLink="/home">Home</a>
     </li>
     <li class="breadcrumb-item">
-      <a routerLink="/expenses">My Expenses</a>
+      <a routerLink="/needs">Our Needs</a>
     </li>
     <li class="breadcrumb-item active" aria-current="page">Add</li>
   </ol>
@@ -12,10 +12,10 @@
 <div class="main-content">
   <div class="row">
     <div class="col-md-4">
-      <form [formGroup]="expensesForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="needsForm" (ngSubmit)="onSubmit()">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">add new expenses details</h3>
+            <h3 class="card-title">add new need details</h3>
           </div>
           <div class="card-content">
             <div class="form-group row">
@@ -27,20 +27,20 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-md-1"> Amount </label>
+              <label class="col-form-label col-md-1"> Quantity </label>
               <div class="col-md-6">
-                <input type="number" row="5" class="form-control" formControlName="txtAmount" placeholder="amount" />
+                <input type="number" row="5" class="form-control" formControlName="txtQuantity" placeholder="quantity" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-md-1"> details </label>
+              <label class="col-form-label col-md-1"> Item Description </label>
               <div class="col-md-6">
-                <textarea row="5" class="form-control" formControlName="txtDetails" placeholder="details"></textarea>
+                <textarea row="5" class="form-control" formControlName="txtDescription" placeholder="item Description"></textarea>
               </div>
             </div>
           </div>
           <div class="card-footer text-center">
-            <button type="submit" class="btn btn-primary btn-sm btn-round" [disabled]="!expensesForm.valid">Add Expeneses</button>
+            <button type="submit" class="btn btn-primary btn-sm btn-round" [disabled]="!needsForm.valid">Add Need</button>
             <div style="margin-top:10px;">
               <a (click)="onCancel()">Cancel</a>
             </div>

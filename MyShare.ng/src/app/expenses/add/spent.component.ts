@@ -23,7 +23,7 @@ export class SpentComponent implements OnInit {
       'txtAmount': new FormControl(null, Validators.required),
       'txtDetails': new FormControl(null, Validators.required),
       'ddlGroups': new FormControl(null, Validators.required)
-    })
+    });
   }
 
   onSubmit() {

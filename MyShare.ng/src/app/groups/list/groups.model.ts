@@ -18,18 +18,16 @@ export class GroupsViewModel {
 
     this.services.firebaseFunctions.getGroups(this.userId)
       .then((response) => {
-        this.services.spinner.hide();
         this.groups = response.json();
+        this.services.spinner.hide();
         if (this.groups.length === 0) {
           this.services.toastrSevice.warning("You are not member in any group.");
         }
         else {
           this.groups.forEach(group => {
-            this.services.spinner.show();
             this.services.firebaseFunctions.isGroupAdmin(group.id, localStorage.getItem('userId'))
               .then(response => {
                 group.isAdmin = response.json();
-                this.services.spinner.hide();
               });
           });
         }
