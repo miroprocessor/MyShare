@@ -29,4 +29,8 @@ export class GroupsNeedsComponent implements OnInit {
     this.model.likeNeed(groupId, needId);
   }
 
+  onDelete(groupId: string, needId: string) {
+    this.model.deleteNeed(groupId, needId);
+  }
+
 }

@@ -51,6 +51,24 @@ export class GroupsNeedsModel {
                 else {
                     this.services.toastrSevice.error('can\'t like may be later');
                 }
-            })
+            });
+    }
+    deleteNeed(groupId: string, needId: string) {
+        if (confirm('are you sure you no longer need this item?')) {
+            this.services.spinner.show();
+            this.services.angularFirebaseService.deleteNeed(groupId, needId)
+                .then(_ => {
+                    this.services.spinner.hide();
+                })
+                .catch(error => {
+                    this.services.spinner.hide();
+                    if (error == 'FirebaseError: [code=unavailable]: Connection failed.') {
+                        this.services.toastrSevice.error('can\'t vote while no internet connection');
+                    }
+                    else {
+                        this.services.toastrSevice.error('can\'t like may be later');
+                    }
+                });
+        }
     }
 }

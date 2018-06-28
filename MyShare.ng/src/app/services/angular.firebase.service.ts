@@ -21,7 +21,7 @@ export class AngularFirebaseService {
             .snapshotChanges()
     }
 
-    likeNeed(groupId: string, needId: string):Promise<void> {
+    likeNeed(groupId: string, needId: string): Promise<void> {
         // return this.db.doc('groups/' + groupId + '/needs/' + needId)
         //     .ref
         //     .get()
@@ -38,5 +38,11 @@ export class AngularFirebaseService {
                     transaction.update(needDoc, { 'votes': needRef.data().votes + 1 });
                 });
         });
+    }
+
+    deleteNeed(groupId: string, needId: string): Promise<void> {
+        return this.db.doc('groups/' + groupId + '/needs/' + needId)
+            .ref
+            .delete();
     }
 }
