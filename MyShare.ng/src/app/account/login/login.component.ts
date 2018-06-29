@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private services: ServicesUnit) {
-    this.services.authGuard.isAuthorized.next(false);    
+    this.services.authGuard.isAuthorized.next(false);
   }
 
   ngOnInit() {
@@ -26,24 +26,42 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.services.spinner.show();
 
-    this.services.firebaseFunctions.login(this.loginForm.get('txtPhone').value, this.loginForm.get('txtPassword').value)
-      .then((response) => {
+    const phone = this.loginForm.get('txtPhone').value;
+
+    this.services.angularFirebaseService.login(phone, this.loginForm.get('txtPassword').value)
+      .then(result => {
         this.services.spinner.hide();
-        if (response.status === 200) {
-          const user = response.json();
-          localStorage.setItem("userId", user.id);
-          localStorage.setItem("phone", this.loginForm.get('txtPhone').value);
+        if (result) {
+          localStorage.setItem("userId", phone);
           this.services.route.navigate(['/']);
         }
-        else if (response.status === 404){
+        else {
           this.services.toastrSevice.error('wrong phone number and password.');
-        }        
-        this.services.spinner.hide();
+        }
       })
-      .catch((error) => {
+      .catch(_ => {
         this.services.toastrSevice.error('wrong phone number and password.');
         this.services.spinner.hide();
       })
+
+    // this.services.firebaseFunctions.login(this.loginForm.get('txtPhone').value, this.loginForm.get('txtPassword').value)
+    //   .then((response) => {
+    //     this.services.spinner.hide();
+    //     if (response.status === 200) {
+    //       const user = response.json();
+    //       localStorage.setItem("userId", user.id);
+    //       localStorage.setItem("phone", this.loginForm.get('txtPhone').value);
+    //       this.services.route.navigate(['/']);
+    //     }
+    //     else if (response.status === 404){
+    //       this.services.toastrSevice.error('wrong phone number and password.');
+    //     }        
+    //     this.services.spinner.hide();
+    //   })
+    //   .catch((error) => {
+    //     this.services.toastrSevice.error('wrong phone number and password.');
+    //     this.services.spinner.hide();
+    //   })
   }
 
   onRegister() {

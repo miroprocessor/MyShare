@@ -46,3 +46,7 @@ export interface INeed {
     votes: number
 }
 
+export interface IUser {
+    name: string,
+    password: string
+}

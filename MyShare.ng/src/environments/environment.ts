@@ -9,12 +9,13 @@ export const environment = {
   //create your firebase project and put its configuration and URI here.
 
   firebase: {
-    apiKey: "",
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: ""
+    apiKey: 'AIzaSyAgbnSmURIXzlUg5mVgr4NQOG1gpQkZb4c',
+    authDomain: 'expenses-f5bc0.firebaseapp.com',
+    databaseURL: 'https://expenses-f5bc0.firebaseio.com',
+    projectId: 'expenses-f5bc0',
+    storageBucket: 'expenses-f5bc0.appspot.com',
+    messagingSenderId: '509254444814'
+
   },
 
   fireFunctionsUrl: ''
