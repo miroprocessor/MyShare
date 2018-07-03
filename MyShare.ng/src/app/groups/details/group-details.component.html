@@ -26,9 +26,9 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div class="card" *ngIf="model.showMembers">
+      <div class="card" >
         <div class="card-header">
-          <h6>{{model.members.length}} participants</h6>
+          <h6>{{ model.participantsCount }} participants</h6>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -37,7 +37,7 @@
                 <tr *ngFor="let member of model.members">
                   <td>{{member.name}}</td>
                   <td class="text-right">
-                    <span class="is-admin" *ngIf="member.isAdmin">group admin</span>
+                    <span class="is-admin" *ngIf="member.groupAdmin">group admin</span>
                   </td>
                 </tr>
               </tbody>
@@ -47,7 +47,7 @@
       </div>
     </div>
   </div>
-  <div class="plus" *ngIf="model.canInvite">
+  <div class="plus" *ngIf="model.isAdmin">
     <button class="btn btn-link btn-sm" type="button" (click)="open(content)">+</button>
   </div>
   <ng-template #content let-c="close" let-d="dismiss">

@@ -18,7 +18,7 @@ export class CloseModel {
                 this.expenses = promises[0].json();
                 this.members = promises[1].json();
 
-                this.isAdmin = this.members.find(_ => _.id === localStorage.getItem('userId') && _.isAdmin) ? true : false;
+                this.isAdmin = this.members.find(_ => _.id === localStorage.getItem('id') && _.isAdmin) ? true : false;
 
                 this.expenses.forEach(exp => {
                     exp.spentOn = new Date(exp.spentOn).toLocaleString();

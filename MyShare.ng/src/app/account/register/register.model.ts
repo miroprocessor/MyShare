@@ -14,7 +14,8 @@ export class RegisterModel {
             .then(result => {
                 if (result) {
                     this.services.spinner.hide();
-                    localStorage.setItem("userId", phone);
+                    localStorage.setItem("id", phone);
+                    localStorage.setItem("name", user.name);
                     this.services.route.navigate(["/"]);
                 }
                 else {

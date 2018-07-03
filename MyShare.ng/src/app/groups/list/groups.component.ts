@@ -36,7 +36,7 @@ export class GroupsComponent implements OnInit {
   }
 
   onExpenses(groupId: string, groupName: string, groupBio: string) {
-  
+
     this.services.sharedData.set(groupId, groupName, groupBio);
 
     this.services.route.navigate(["/expenses/close"]);

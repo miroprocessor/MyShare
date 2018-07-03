@@ -11,7 +11,7 @@ export class InvitationsModel {
   loadInivtaitons() {
     this.services.spinner.show();
     this.invitations = [];
-    this.services.firebaseFunctions.getInvitations(localStorage.getItem('userId'))
+    this.services.firebaseFunctions.getInvitations(localStorage.getItem('id'))
       .then((response) => {
         this.invitations = response.json();
         this.services.spinner.hide();
@@ -25,7 +25,7 @@ export class InvitationsModel {
   accept(invitationId: string, groupId: string) {
     this.services.spinner.show();
     const that = this;
-    this.services.firebaseFunctions.acceptInvitation(invitationId, groupId, localStorage.getItem('userId'))
+    this.services.firebaseFunctions.acceptInvitation(invitationId, groupId, localStorage.getItem('id'))
       .then(function (result) {
         that.loadInivtaitons();
         that.services.toastrSevice.success('invitation is accepted successfully');

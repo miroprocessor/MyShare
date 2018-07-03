@@ -27,29 +27,48 @@ export class LoginComponent implements OnInit {
     this.services.spinner.show();
 
     const phone = this.loginForm.get('txtPhone').value;
+    const password = this.loginForm.get('txtPassword').value;
 
-    this.services.angularFirebaseService.login(phone, this.loginForm.get('txtPassword').value)
-      .then(result => {
+    this.services.angularFirebaseService.getUser(phone)
+      .subscribe(userDoc => {
+        console.log('userDoc', userDoc);
         this.services.spinner.hide();
-        if (result) {
-          localStorage.setItem("userId", phone);
+        if (userDoc && userDoc.password === password) {
+          localStorage.setItem("id", phone);
+          localStorage.setItem("name", userDoc.name);
           this.services.route.navigate(['/']);
         }
         else {
           this.services.toastrSevice.error('wrong phone number and password.');
         }
-      })
-      .catch(_ => {
-        this.services.toastrSevice.error('wrong phone number and password.');
-        this.services.spinner.hide();
-      })
+      },
+        error => {
+          this.services.toastrSevice.error('wrong phone number and password.');
+          this.services.spinner.hide();
+        })
+
+    // this.services.angularFirebaseService.login(phone, this.loginForm.get('txtPassword').value)
+    //   .then(result => {
+    //     this.services.spinner.hide();
+    //     if (result) {
+    //       localStorage.setItem("id", phone);
+    //       this.services.route.navigate(['/']);
+    //     }
+    //     else {
+    //       this.services.toastrSevice.error('wrong phone number and password.');
+    //     }
+    //   })
+    //   .catch(_ => {
+    //     this.services.toastrSevice.error('wrong phone number and password.');
+    //     this.services.spinner.hide();
+    //   })
 
     // this.services.firebaseFunctions.login(this.loginForm.get('txtPhone').value, this.loginForm.get('txtPassword').value)
     //   .then((response) => {
     //     this.services.spinner.hide();
     //     if (response.status === 200) {
     //       const user = response.json();
-    //       localStorage.setItem("userId", user.id);
+    //       localStorage.setItem("id", user.id);
     //       localStorage.setItem("phone", this.loginForm.get('txtPhone').value);
     //       this.services.route.navigate(['/']);
     //     }

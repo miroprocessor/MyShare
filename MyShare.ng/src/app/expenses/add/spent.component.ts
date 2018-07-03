@@ -30,7 +30,7 @@ export class SpentComponent implements OnInit {
     let expenses: IExpenses = {
       amount: this.expensesForm.get('txtAmount').value,
       details: this.expensesForm.get('txtDetails').value,
-      userId: localStorage.getItem('userId'),
+      userId: localStorage.getItem('id'),
       groupId: this.expensesForm.get('ddlGroups').value,
       spentOn: new Date()
     };

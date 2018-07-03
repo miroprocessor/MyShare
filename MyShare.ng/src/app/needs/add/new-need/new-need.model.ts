@@ -11,7 +11,7 @@ export class NewNeedModel {
     loadGroups() {
         this.services.spinner.show();
         this.groups = [];
-        this.services.firebaseFunctions.getGroups(localStorage.getItem('userId'))
+        this.services.firebaseFunctions.getGroups(localStorage.getItem('id'))
             .then((response) => {
                 this.groups = response.json()
                 this.services.spinner.hide();

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GroupDetailsModel } from './group.model';
 import { ServicesUnit } from '../../services/unit.services';
-import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { InviteModel } from '../../invitaions/invite/invite.model';
 

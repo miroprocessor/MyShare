@@ -18,7 +18,7 @@ export class InviteMemberComponent implements OnInit {
     }
     else {
       this.services.spinner.show();
-      this.services.firebaseFunctions.isGroupAdmin(this.services.sharedData.groupId, localStorage.getItem('userId'))
+      this.services.firebaseFunctions.isGroupAdmin(this.services.sharedData.groupId, localStorage.getItem('id'))
         .then(response => {
           this.services.spinner.hide();
           if (!response.json()) {

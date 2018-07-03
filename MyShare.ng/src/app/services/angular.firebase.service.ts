@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference, DocumentChangeAction } from "angularfire2/firestore";
-import { INeed, IUser } from "../shared/interfaces";
-import { Observable, throwError } from "rxjs";
+import { INeed, IUser, IGroup, IMember, IGroupMember } from "../shared/interfaces";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class AngularFirebaseService {
@@ -9,19 +9,7 @@ export class AngularFirebaseService {
     constructor(private db: AngularFirestore) {
     }
 
-
-    userExists(phone: string): Promise<boolean> {
-        return this.db.firestore.doc('users/' + phone)
-            .get()
-            .then(_ => {
-                return _.exists;
-            })
-            .catch(_ => {
-                return true; // to stop continue in case of register new user
-            })
-    }
-
-    register(phone: string, user: IUser): Promise<boolean | void> {
+    register(phone: string, user: IUser): Promise<boolean> {
         return this.db.firestore.doc('users/' + phone)
             .get()
             .then(_ => {
@@ -44,30 +32,31 @@ export class AngularFirebaseService {
             });
     }
 
-    login(phone: string, password: string): Promise<boolean> {
-        return this.db.firestore.doc('users/'+phone)
-            .get()
-            .then(_ => {
-                if (!_.exists) {
-                    return Promise.reject(false);
-                }
-                else {
-                    if (_.data().password !== password) {
-                        return Promise.reject(false);
-                    }
-                    else {
-                        return Promise.resolve(true);
-                    }
-                }
-            })
-            .then(_ => {
-                return true;
-            })
-            .catch((reason): boolean => {
-                return false;
-            })
+    getUser(phone: string): Observable<IUser> {
+        return this.db.doc<IUser>('users/' + phone)
+            .valueChanges();
     }
 
+    addGroup(group: IGroup): Promise<void> {
+        return this.db.collection<IGroup>('groups')
+            .add(group)
+            .then(groupRef => {
+                return this.db.doc('members/' + groupRef.id).set({ [group.admin]: true });
+            });
+    }
+
+    userGroups(userId: string): Promise<firebase.firestore.QuerySnapshot> {
+        return this.db.collection('members').ref.where('' + userId + '', '==', true)
+            .get();
+    }
+
+    getGroup(groupId: string): Observable<IGroup> {
+        return this.db.doc<IGroup>('groups/' + groupId).valueChanges();
+    }
+
+    groupMembers(groupId: string): Observable<IGroupMember> {
+        return this.db.doc<IGroupMember>('members/' + groupId).valueChanges();
+    }
 
     addNeeds(groupId: string, need: INeed): Promise<DocumentReference> {
         return this.db.doc('groups/' + groupId)
@@ -97,4 +86,24 @@ export class AngularFirebaseService {
             .ref
             .delete();
     }
+
+    invite(groupId: string, memberPhone: string): Promise<void> {
+        return this.db.collection('invitations').doc(groupId)
+            .set({ [memberPhone]: true });
+    }
+
+    // isGroupMember(groupId: string, phone: string): Observable<IGroupMember> {
+    //     this.db.doc<IMember>('members/' + groupId)
+    //         .valueChanges()
+    //         .subscribe(phones => {
+    //             for (var p in phones) {
+    //                 if (p === phone) {
+    //                     return true;
+    //                 }
+    //                 else {
+    //                     return false;
+    //                 }
+    //             }
+    //         });
+    // }
 }

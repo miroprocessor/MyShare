@@ -6,31 +6,12 @@ export interface IRegisterModel {
     password: string;
 }
 
-export interface IGroupModel {
-    name: string;
-    bio: string;
-    createdOn: Date;
-}
-
-export interface IMember {
-    userId: string;
-    isAdmin: boolean;
-}
-
-export interface GroupModel {
-    id: string;
-    name: string;
-    bio: string;
-    member: IMember;
-}
-
 export interface IInvitationModel {
     userId: string;
     groupId: string;
     groupName: string;
     status: enums.InvitationStatus;
 }
-
 
 export interface IExpenses {
     amount: number,
@@ -49,4 +30,27 @@ export interface INeed {
 export interface IUser {
     name: string,
     password: string
+}
+
+export interface IUserFull extends IUser {
+    id: string,
+    groupAdmin: boolean
+}
+
+export interface IGroup {
+    name: string,
+    bio: string,
+    admin: string
+}
+export interface IGroupFull extends IGroup {
+    id: string
+}
+
+export interface IGroupMember {
+    member: IMember
+}
+
+export interface IMember {
+    name: string,
+    admin: boolean
 }

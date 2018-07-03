@@ -2,8 +2,7 @@
 import { Http, Headers, RequestOptions, ResponseContentType, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from '@firebase/util';
-import { IGroupModel, IMember, IExpenses } from '../shared/interfaces';
+import { IExpenses } from '../shared/interfaces';
 
 
 @Injectable()
@@ -26,12 +25,6 @@ export class FirebaseFunctions {
     register(name: string, phone: string, password: string): Promise<Response> {
         return this.http
             .post(this.functionsUrl + 'register', { 'name': name, 'phone': phone, 'password': password }, this.requestOptions)
-            .toPromise();
-    }
-
-    createGroup(group: IGroupModel, member: IMember): Promise<Response> {
-        return this.http
-            .post(this.functionsUrl + 'createGroup', { 'group': group, 'member': member }, this.requestOptions)
             .toPromise();
     }
 

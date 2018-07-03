@@ -15,11 +15,11 @@ export class GroupsNeedsModel {
     loadNeeds() {
         this.services.spinner.show();
 
-        this.services.firebaseFunctions.getGroups(localStorage.getItem('userId'))
+        this.services.firebaseFunctions.getGroups(localStorage.getItem('id'))
             .then(_groups => {
                 this.groups = _groups.json();
                 this.groups.forEach(_group => {
-                    _group.needs = this.services.angularFirebaseService.groupNeeds(_group.id);
+                    //_group.needs = this.services.angularFirebaseService.groupNeeds(_group.id);
                     this.services.angularFirebaseService.groupNeeds(_group.id)
                         .pipe(
                             map(

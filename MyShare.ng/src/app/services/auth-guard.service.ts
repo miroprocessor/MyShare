@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        var userId = localStorage.getItem('userId');
+        var userId = localStorage.getItem('id');
         if (userId) {
             this.isAuthorized.next(true);
             return true;

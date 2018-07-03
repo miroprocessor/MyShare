@@ -9,7 +9,7 @@ export class MyExpensesModel {
     loadExpenses() {
         this.services.spinner.show();
         this.groups = [];
-        this.services.firebaseFunctions.getUserExpenses(localStorage.getItem('userId'))
+        this.services.firebaseFunctions.getUserExpenses(localStorage.getItem('id'))
             .then((response) => {
                 response.json().forEach(element => {
                     const group = this.groups.find(_group => _group.id === element.groupId);

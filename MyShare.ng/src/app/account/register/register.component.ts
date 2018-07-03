@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
     //   .then((response) => {
     //     this.services.spinner.hide();
     //     const user = response.json();
-    //     localStorage.setItem("userId", user.id);
+    //     localStorage.setItem("id", user.id);
     //     localStorage.setItem("phone", this.registerForm.get('txtPhone').value);
     //     this.services.route.navigate(["/"]);
     //   })

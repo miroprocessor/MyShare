@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { SpinnerStateService } from "../../services/spinnerState.service";
-import { Router } from "@angular/router";
-import { IGroupModel, IMember } from "../../shared/interfaces";
+import { IGroup } from "../../shared/interfaces";
 import { ServicesUnit } from "../../services/unit.services";
 
 @Component({
@@ -25,19 +23,15 @@ export class NewGroupComponent implements OnInit {
   }
 
   onSubmit() {
-    let group: IGroupModel = {
+   
+    let group: IGroup = {
       name: this.newgroupForm.get("txtName").value,
       bio: this.newgroupForm.get("txtBio").value,
-      createdOn: new Date()
-    };
-
-    let member: IMember = {
-      userId: localStorage.getItem('userId'),
-      isAdmin: true
+      admin: localStorage.getItem('id')
     }
     this.services.spinner.show();
 
-    this.services.firebaseFunctions.createGroup(group, member)
+    this.services.angularFirebaseService.addGroup(group)
       .then(() => {
         this.services.spinner.hide();
         this.services.route.navigate(["/groups"]);
@@ -47,7 +41,7 @@ export class NewGroupComponent implements OnInit {
         this.services.toastrSevice.error(_error);
       })
   }
-  onCancel(){
+  onCancel() {
     this.services.route.navigate(["/groups"]);
   }
 }
