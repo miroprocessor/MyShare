@@ -15,12 +15,14 @@ export class InvitationsComponent implements OnInit {
 
   ngOnInit() { }
 
-  onAccept(invitationId: string, groupId: string) {
-    this.model.accept(invitationId, groupId);
+  onAccept(groupId: string) {
+    if (confirm('if you accepted this invitation, you will be member of this group and will share its expenses.\n are you sure?')) {
+      this.model.accept(groupId);
+    }
   }
 
-  onReject(invitationId: string) {
-    this.model.reject(invitationId);
+  onReject(groupId: string) {
+    this.model.reject(groupId);
   }
 
   onGroupDetails(groupName: string, groupId: string) {

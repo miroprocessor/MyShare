@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
 
     this.services.angularFirebaseService.getUser(phone)
       .subscribe(userDoc => {
-        console.log('userDoc', userDoc);
         this.services.spinner.hide();
         if (userDoc && userDoc.password === password) {
           localStorage.setItem("id", phone);

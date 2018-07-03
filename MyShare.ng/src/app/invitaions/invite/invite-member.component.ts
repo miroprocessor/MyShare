@@ -18,10 +18,10 @@ export class InviteMemberComponent implements OnInit {
     }
     else {
       this.services.spinner.show();
-      this.services.firebaseFunctions.isGroupAdmin(this.services.sharedData.groupId, localStorage.getItem('id'))
-        .then(response => {
+      this.services.angularFirebaseService.getGroup(this.services.sharedData.groupId)
+        .subscribe(group => {
           this.services.spinner.hide();
-          if (!response.json()) {
+          if (group.admin !== localStorage.getItem('id')) {
             this.services.toastrSevice.error('you are not the group admin to invite new members.');
             this.services.route.navigate(["/groups"]);
           }

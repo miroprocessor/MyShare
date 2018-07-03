@@ -1,6 +1,5 @@
 import { ServicesUnit } from "../../services/unit.services";
 import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { Subject } from "rxjs";
 
 export class InviteModel {
 
@@ -16,10 +15,9 @@ export class InviteModel {
             return;
         }
 
-        this.isGroupMember(groupId, memberPhone, () => {
+        this.tryInivte(groupId, memberPhone, () => {
             this.sendInvitation(memberPhone, modalRef)
-        })
-
+        });
     }
 
     private sendInvitation(memberPhone: string, modalRef?: NgbModalRef) {
@@ -38,8 +36,7 @@ export class InviteModel {
             })
     }
 
-    private isGroupMember(groupId, memberPhone, sentInvitation: () => void) {
-
+    private tryInivte(groupId, memberPhone, sentInvitation: () => void) {
         this.services.spinner.show();
 
         const getUser = (memberPhone) => {
@@ -51,6 +48,12 @@ export class InviteModel {
             const members = this.services.angularFirebaseService.groupMembers(groupId);
             return members;
         }
+
+        const groupInvitations = (groupId) => {
+            const invitations = this.services.angularFirebaseService.getGroupInvitations(groupId);
+            return invitations;
+        }
+
         getUser(memberPhone)
             .subscribe(user => {
                 if (user) {
@@ -63,7 +66,23 @@ export class InviteModel {
                                 }
                             }
                             if (canSend) {
-                                sentInvitation();
+                                this.services.spinner.show();
+                                groupInvitations(groupId)
+                                    .subscribe(docRef => {
+                                        this.services.spinner.hide();
+                                        const invitations = docRef.payload.data();
+                                        for (var phone in invitations) {
+                                            if (phone === memberPhone) {
+                                                canSend = false;
+                                            }
+                                        }
+                                        if (canSend) {
+                                            sentInvitation();
+                                        }
+                                        else {
+                                            this.services.toastrSevice.warning('this phone number has been invited before!.')
+                                        }
+                                    });
                             }
                             else {
                                 this.services.toastrSevice.warning('this phone number is already member!.')

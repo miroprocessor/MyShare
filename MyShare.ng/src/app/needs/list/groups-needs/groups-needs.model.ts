@@ -33,7 +33,6 @@ export class GroupsNeedsModel {
                         });
                 });
                 this.services.spinner.hide();
-                console.log('groups', this.groups);
             });
     }
 

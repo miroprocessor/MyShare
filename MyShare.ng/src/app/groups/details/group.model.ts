@@ -28,6 +28,7 @@ export class GroupDetailsModel {
             .subscribe(group => {
                 this.isAdmin = group.admin === localStorage.getItem('id');
 
+                this._bio = group.bio;
                 this.services.angularFirebaseService.groupMembers(this._groupId)
                     .subscribe(groupMembers => {
                         this.participantsCount = Object.keys(groupMembers).length;

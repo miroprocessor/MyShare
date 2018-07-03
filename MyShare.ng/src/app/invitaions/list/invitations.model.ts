@@ -1,8 +1,11 @@
 import { ServicesUnit } from "../../services/unit.services";
 import { enums } from "../../shared/enums";
+import { IGroupFull } from "../../shared/interfaces";
 
 export class InvitationsModel {
-  invitations: any[];
+  groups: IGroupFull[];
+
+  noInvitations: boolean = false;
 
   constructor(private services: ServicesUnit) {
     this.loadInivtaitons();
@@ -10,45 +13,54 @@ export class InvitationsModel {
 
   loadInivtaitons() {
     this.services.spinner.show();
-    this.invitations = [];
-    this.services.firebaseFunctions.getInvitations(localStorage.getItem('id'))
-      .then((response) => {
-        this.invitations = response.json();
+    this.services.angularFirebaseService.getInvitations(localStorage.getItem('id'))
+      .subscribe(invitations => {
         this.services.spinner.hide();
-      })
-      .catch((error) => {
-        this.services.spinner.hide();
-      }
-      );
-  }
+        this.groups = [];
 
-  accept(invitationId: string, groupId: string) {
-    this.services.spinner.show();
-    const that = this;
-    this.services.firebaseFunctions.acceptInvitation(invitationId, groupId, localStorage.getItem('id'))
-      .then(function (result) {
-        that.loadInivtaitons();
-        that.services.toastrSevice.success('invitation is accepted successfully');
-        that.services.spinner.hide();
-      })
-      .catch(function (e) {
-        that.services.toastrSevice.error('error while accepting the invitation, please try later.');
-        that.services.spinner.hide();
+        this.noInvitations = invitations.length === 0;
+
+        invitations.forEach(inv => {
+
+          const groupId = inv.payload.doc.id;
+
+          for (var userId in inv.payload.doc.data()) {
+
+            if (userId === localStorage.getItem('id')) {
+              this.services.angularFirebaseService.getGroup(groupId)
+                .subscribe(_ => {
+                  this.groups.push({ id: groupId, ..._ });
+                  this.services.spinner.hide();
+                });
+            }
+          }
+        });
       });
   }
 
-  reject(invitationId: string) {
+  accept(groupId: string) {
     this.services.spinner.show();
-    const that = this;
-    this.services.firebaseFunctions.reject(invitationId)
-      .then(function (result) {
-        that.loadInivtaitons();
-        that.services.toastrSevice.success('invitation is rejected successfully');
-        that.services.spinner.hide();
+    this.services.angularFirebaseService.acceptInvitation(groupId, localStorage.getItem('id'))
+      .then(() => {
+        this.services.spinner.hide();
+        this.services.toastrSevice.success('You accepted the invitation and became memeber');
       })
-      .catch(function (e) {
-        that.services.toastrSevice.error('error while rejecting the invitation, please try later.');
-        that.services.spinner.hide();
+      .catch(() => {
+        this.services.spinner.hide();
+        this.services.toastrSevice.error('you didn\'t accept the invitation yet. Try later');
+      });
+  }
+
+  reject(groupId: string) {
+    this.services.spinner.show();
+    this.services.angularFirebaseService.rejectInvitation(groupId, localStorage.getItem('id'))
+      .then(() => {
+        this.services.spinner.hide();
+        this.services.toastrSevice.success('You rejected the invitation and they can\'t invite you again');
+      })
+      .catch(() => {
+        this.services.spinner.hide();
+        this.services.toastrSevice.error('you didn\'t reject the invitation yet. Try later');
       });
   }
 }

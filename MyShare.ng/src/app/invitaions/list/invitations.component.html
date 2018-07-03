@@ -9,36 +9,37 @@
 <div class="main-content">
   <div class="row">
     <div class="col-md-12">
-      <div class="alert alert-warning text-center" *ngIf="model.invitations.length == 0">
+      <div class="alert alert-warning text-center" *ngIf="model.noInvitations">
         You don't have pending invitations
       </div>
-      <div class="card" *ngFor="let invitation of model.invitations">
+      <div class="card" *ngFor="let group of model.groups">
         <div class="card-header">
-          <a (click)="onGroupDetails(invitation.groupName,invitation.groupId)">
+          <a (click)="onGroupDetails(group.name,group.id)">
             <h5 class="card-title">
-              {{invitation.groupName}}</h5>
+              {{group.name}}</h5>
           </a>
 
         </div>
-        <div class="card-body">
-          <div class="text-right">
-            <button (click)="onAccept(invitation.id,invitation.groupId);" class="card-link btn btn-link">
-              <svg viewBox="0 0 8 8" style="width:15px;">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check">
-                  <path d="M6.406 1l-.719.688-2.781 2.781-.781-.781-.719-.688-1.406 1.406.688.719 1.5 1.5.719.688.719-.688 3.5-3.5.688-.719-1.406-1.406z"
-                    id="check"></path>
-                </use>
-              </svg>
-              Accept</button>
-            <button (click)="onReject(invitation.id);" class="card-link btn btn-link">
-              <svg viewBox="0 0 8 8" style="width:15px;">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#x">
-                  <path d="M1.406 0l-1.406 1.406.688.719 1.781 1.781-1.781 1.781-.688.719 1.406 1.406.719-.688 1.781-1.781 1.781 1.781.719.688 1.406-1.406-.688-.719-1.781-1.781 1.781-1.781.688-.719-1.406-1.406-.719.688-1.781 1.781-1.781-1.781-.719-.688z"
-                    id="x"></path>
-                </use>
-              </svg>
-              Reject</button>
-          </div>
+        <div class="card-content">
+          {{group.bio}}
+        </div>
+        <div class="card-footer text-right">
+          <button (click)="onAccept(group.id);" class="card-link btn btn-link">
+            <svg viewBox="0 0 8 8" style="width:15px;">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check">
+                <path d="M6.406 1l-.719.688-2.781 2.781-.781-.781-.719-.688-1.406 1.406.688.719 1.5 1.5.719.688.719-.688 3.5-3.5.688-.719-1.406-1.406z"
+                  id="check"></path>
+              </use>
+            </svg>
+            Accept</button>
+          <button (click)="onReject(group.id);" class="card-link btn btn-link">
+            <svg viewBox="0 0 8 8" style="width:15px;">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#x">
+                <path d="M1.406 0l-1.406 1.406.688.719 1.781 1.781-1.781 1.781-.688.719 1.406 1.406.719-.688 1.781-1.781 1.781 1.781.719.688 1.406-1.406-.688-.719-1.781-1.781 1.781-1.781.688-.719-1.406-1.406-.719.688-1.781 1.781-1.781-1.781-.719-.688z"
+                  id="x"></path>
+              </use>
+            </svg>
+            Reject</button>
         </div>
       </div>
     </div>
