@@ -15,7 +15,5 @@ export const environment = {
     projectId: 'expenses-f5bc0',
     storageBucket: 'expenses-f5bc0.appspot.com',
     messagingSenderId: '509254444814'
-  },
-
-  fireFunctionsUrl: 'https://us-central1-expenses-f5bc0.cloudfunctions.net/'
+  }
 };

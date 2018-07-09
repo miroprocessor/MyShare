@@ -10,7 +10,5 @@ export const environment = {
     projectId: "",
     storageBucket: "",
     messagingSenderId: ""
-  },
-
-  fireFunctionsUrl: ''
+  }
 };
