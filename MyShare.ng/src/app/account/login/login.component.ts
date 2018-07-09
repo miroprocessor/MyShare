@@ -45,41 +45,6 @@ export class LoginComponent implements OnInit {
           this.services.toastrSevice.error('wrong phone number and password.');
           this.services.spinner.hide();
         })
-
-    // this.services.angularFirebaseService.login(phone, this.loginForm.get('txtPassword').value)
-    //   .then(result => {
-    //     this.services.spinner.hide();
-    //     if (result) {
-    //       localStorage.setItem("id", phone);
-    //       this.services.route.navigate(['/']);
-    //     }
-    //     else {
-    //       this.services.toastrSevice.error('wrong phone number and password.');
-    //     }
-    //   })
-    //   .catch(_ => {
-    //     this.services.toastrSevice.error('wrong phone number and password.');
-    //     this.services.spinner.hide();
-    //   })
-
-    // this.services.firebaseFunctions.login(this.loginForm.get('txtPhone').value, this.loginForm.get('txtPassword').value)
-    //   .then((response) => {
-    //     this.services.spinner.hide();
-    //     if (response.status === 200) {
-    //       const user = response.json();
-    //       localStorage.setItem("id", user.id);
-    //       localStorage.setItem("phone", this.loginForm.get('txtPhone').value);
-    //       this.services.route.navigate(['/']);
-    //     }
-    //     else if (response.status === 404){
-    //       this.services.toastrSevice.error('wrong phone number and password.');
-    //     }        
-    //     this.services.spinner.hide();
-    //   })
-    //   .catch((error) => {
-    //     this.services.toastrSevice.error('wrong phone number and password.');
-    //     this.services.spinner.hide();
-    //   })
   }
 
   onRegister() {

@@ -9,17 +9,26 @@ export class NewNeedModel {
     }
 
     loadGroups() {
+
         this.services.spinner.show();
-        this.groups = [];
-        this.services.firebaseFunctions.getGroups(localStorage.getItem('id'))
-            .then((response) => {
-                this.groups = response.json()
+        this.services.angularFirebaseService.getUserGroups(localStorage.getItem('id'))
+            .subscribe(memberRefs => {
+                this.groups = [];
+                memberRefs.forEach(groupRef => {
+                    const groupId = groupRef.payload.doc.id;
+                    this.services.angularFirebaseService.getGroup(groupId)
+                        .subscribe(_group => {
+                            const index = this.groups.findIndex(x => x.id === groupId)
+                            if (index > -1) {
+                                this.groups[index] = { id: groupId, ..._group };
+                            }
+                            else {
+                                this.groups.push({ id: groupId, ..._group });
+                            }
+                        });
+                });
                 this.services.spinner.hide();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.services.spinner.hide();
-            })
+            });
     }
 
     addNeed(groupId: string, need: INeed, callback: () => void) {

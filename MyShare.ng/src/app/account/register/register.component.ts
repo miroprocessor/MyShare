@@ -34,20 +34,6 @@ export class RegisterComponent implements OnInit {
         'name': this.registerForm.get('txtName').value,
         'password': this.registerForm.get('txtPassword').value
       });
-    // return;
-    // this.services.spinner.show();
-    // this.services.firebaseFunctions.register(this.registerForm.get('txtName').value, this.registerForm.get('txtPhone').value, this.registerForm.get('txtPassword').value)
-    //   .then((response) => {
-    //     this.services.spinner.hide();
-    //     const user = response.json();
-    //     localStorage.setItem("id", user.id);
-    //     localStorage.setItem("phone", this.registerForm.get('txtPhone').value);
-    //     this.services.route.navigate(["/"]);
-    //   })
-    //   .catch((error) => {
-    //     this.services.spinner.hide();
-    //     this.services.toastrSevice.error(error._body);
-    //   })
   }
 
   onLogin() {

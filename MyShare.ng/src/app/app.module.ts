@@ -15,7 +15,6 @@ import { ComponentsModule } from './shared/components.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard.service';
-import { FirebaseFunctions } from './services/firebase.functions';
 import { SpinnerStateService } from './services/spinnerState.service';
 import { DataService } from './services/data.service';
 import { ServicesUnit } from './services/unit.services';
@@ -51,7 +50,6 @@ import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.com
     GroupsNeedsComponent
   ],
   providers: [
-    FirebaseFunctions,
     AuthGuard,
     SpinnerStateService,
     DataService,

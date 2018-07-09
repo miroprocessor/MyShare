@@ -54,6 +54,10 @@ export interface IGroupFull extends IGroup {
     id: string
 }
 
+export interface IGroupNeeds extends IGroupFull {
+    needs: INeed[]
+}
+
 export interface IGroupExpenses extends IGroupFull {
     expenses: IExpenses[]
 }
