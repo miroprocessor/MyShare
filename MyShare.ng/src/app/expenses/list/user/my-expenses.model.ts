@@ -1,37 +1,48 @@
 import { ServicesUnit } from "../../../services/unit.services";
+import { IGroupExpenses, IExpenses } from "../../../shared/interfaces";
 
 export class MyExpensesModel {
-    groups: any[];
+    groups: IGroupExpenses[];
+
+    noExpenses: boolean = false;
+
+    userId = localStorage.getItem('id');
+
     constructor(private services: ServicesUnit) {
         this.loadExpenses();
     }
 
     loadExpenses() {
-        this.services.spinner.show();
-        this.groups = [];
-        this.services.firebaseFunctions.getUserExpenses(localStorage.getItem('id'))
-            .then((response) => {
-                response.json().forEach(element => {
-                    const group = this.groups.find(_group => _group.id === element.groupId);
-                    element.spentOn = new Date(element.spentOn).toLocaleString();
-                    if (group) {
-                        group.expenses.push(element);
-                    }
-                    else {
-                        this.groups.push({
-                            'id': element.groupId,
-                            'name': element.groupName,
-                            'isAdmin': element.isAdmin,
-                            'bio': element.groupBio,
-                            expenses: [element]
-                        });
-                    }
-                });
-                this.services.spinner.hide();
-            })
-            .catch((error) => {
-                this.services.spinner.hide();
-                this.services.toastrSevice.error('could NOT get your expenses, try later');
-            })
+
+        this.services.angularFirebaseService.getUserGroups(this.userId)
+        .subscribe(memberRefs => {
+            this.noExpenses = memberRefs.length === 0;
+            this.groups = [];
+            memberRefs.forEach(groupRef => {
+                const groupId = groupRef.payload.doc.id;
+                this.services.angularFirebaseService.getGroup(groupId)
+                    .subscribe(groupDoc => {
+                        const group: IGroupExpenses = { id: groupId, expenses: [], ...groupDoc };
+                        // get expenses
+                        this.services.angularFirebaseService.getUserExpenses(groupId, this.userId)
+                            .subscribe(expRefs => {
+                                group.expenses = [];
+                                expRefs.forEach(expRef => {
+                                    const exp = expRef.payload.doc.data();
+                                    group.expenses.push(exp);
+                                });
+
+                                const index = this.groups.findIndex(x => x.id === groupId)
+                                if (index > -1) {
+                                    this.groups[index] = group;
+                                }
+                                else {
+                                    this.groups.push(group);
+                                }
+                            });
+                    });
+            });
+            this.services.spinner.hide();
+        });
     }
 }

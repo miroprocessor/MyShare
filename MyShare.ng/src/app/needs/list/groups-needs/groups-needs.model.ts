@@ -1,7 +1,5 @@
 import { ServicesUnit } from "../../../services/unit.services";
-import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { INeed } from "../../../shared/interfaces";
 
 export class GroupsNeedsModel {
 
@@ -19,8 +17,7 @@ export class GroupsNeedsModel {
             .then(_groups => {
                 this.groups = _groups.json();
                 this.groups.forEach(_group => {
-                    //_group.needs = this.services.angularFirebaseService.groupNeeds(_group.id);
-                    this.services.angularFirebaseService.groupNeeds(_group.id)
+                    this.services.angularFirebaseService.getGroupNeeds(_group.id)
                         .pipe(
                             map(
                                 actions => actions.map(_ => {

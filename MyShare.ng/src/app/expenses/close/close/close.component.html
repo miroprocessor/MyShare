@@ -1,70 +1,72 @@
-<nav aria-label="breadcrumb" role="navigation">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a routerLink="/home">Home</a>
-    </li>
-    <li class="breadcrumb-item">
-      <a routerLink="/expenses">My Expenses</a>
-    </li>
-    <li class="breadcrumb-item">
-      <a routerLink="/groups/details">
-        {{services.sharedData.groupName}}
-      </a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">Close</li>
-  </ol>
-</nav>
-<div class="main-content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <h6 class="card-title">{{services.sharedData.groupName}}</h6>
-        </div>
-        <div class="card-content">
-          <div class="alert alert-danger" style="margin-bottom: 0px;">Total :
-            <strong>{{model.total}}</strong>
-            <br /> Amount/Member :
-            <strong>{{model.dueAmount}}</strong>
+<ng-container *ngIf="model.group | async as group">
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/home">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a routerLink="/expenses">My Expenses</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a routerLink="/groups/details">
+          {{group.name}}
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Close</li>
+    </ol>
+  </nav>
+  <div class="main-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="card-title"> {{group.name}}</h6>
+          </div>
+          <div class="card-content">
+            <div class="alert alert-info" style="margin-bottom: 0px;">Total :
+              <strong> {{group.totals|number:"0.3"}}</strong>
+              <br /> Amount/Member :
+              <strong> {{model.dueAmount|number:"0.3"}}</strong>
+            </div>
+          </div>
+          <div class="card-footer text-center" *ngIf="model.expenses.length > 0">
+            <button *ngIf="group.admin === model.userId" class="btn btn-primary btn-round btn-sm" (click)="onClose()">Confirm Closing</button>
           </div>
         </div>
-        <div class="card-footer text-center" *ngIf="model.expenses.length > 0">
-          <button *ngIf="model.isAdmin" class="btn btn-primary btn-round btn-sm" (click)="onClose()">Confirm Closing</button>
+        <div class="card" *ngIf="model.expenses.length > 0">
+          <div class="card-header">
+            <h6 class="card-title">Members' shares</h6>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <tr *ngFor="let balance of model.balances">
+                <td>{{balance.name}} : {{balance.amount|number:"0.3"}}</td>
+              </tr>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="card" *ngIf="model.expenses.length > 0">
-        <div class="card-header">
-          <h6 class="card-title">Members' shares</h6>
-        </div>
-        <div class="card-content">
-          <table class="table">
-            <tr *ngFor="let balance of model.balances">
-              <td>{{balance.name}} : {{balance.amount}}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <div class="card" *ngIf="model.expenses.length > 0">
-        <div class="card-header">
-          <h6 class="card-title">opened expenses</h6>
-        </div>
-        <div class="card-content">
-          <table class="table">
-            <tr>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Details</th>
-              <th>Date</th>
-            </tr>
-            <tr *ngFor="let expense of model.expenses">
-              <td>{{expense.userName}}</td>
-              <td>{{expense.amount}}</td>
-              <td>{{expense.details}}</td>
-              <td>{{expense.spentOn}}</td>
-            </tr>
-          </table>
+        <div class="card" *ngIf="model.expenses.length > 0">
+          <div class="card-header">
+            <h6 class="card-title">opened expenses</h6>
+          </div>
+          <div class="card-content">
+            <table class="table">
+              <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Details</th>
+                <th>Date</th>
+              </tr>
+              <tr *ngFor="let expense of model.expenses">
+                <td>{{expense.name}}</td>
+                <td>{{expense.amount|number:"0.3"}}</td>
+                <td>{{expense.details}}</td>
+                <td>{{expense.spentOn.seconds*1000|date:"dd/MM/yyyy hh:mma"}}</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>

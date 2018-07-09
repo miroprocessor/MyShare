@@ -13,18 +13,19 @@ export class GroupsViewModel {
 
   loadGroups() {
     this.services.spinner.show();
-    this.groups = [];
-    this.services.angularFirebaseService.userGroups(localStorage.getItem('id'))
-      .then(memberRefs => {
+    this.services.angularFirebaseService.getUserGroups(localStorage.getItem('id'))
+      .subscribe(memberRefs => {
+        this.groups = [];
         memberRefs.forEach(groupRef => {
-          this.services.angularFirebaseService.getGroup(groupRef.id)
+          const groupId = groupRef.payload.doc.id;
+          this.services.angularFirebaseService.getGroup(groupId)
             .subscribe(_group => {
-              const index = this.groups.findIndex(x => x.id === groupRef.id)
+              const index = this.groups.findIndex(x => x.id === groupId)
               if (index > -1) {
-                this.groups[index] = { id: groupRef.id, ..._group };
+                this.groups[index] = { id: groupId, ..._group };
               }
               else {
-                this.groups.push({ id: groupRef.id, ..._group });
+                this.groups.push({ id: groupId, ..._group });
               }
             });
         });

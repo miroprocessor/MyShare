@@ -23,11 +23,13 @@ export class NewGroupComponent implements OnInit {
   }
 
   onSubmit() {
-   
+
     let group: IGroup = {
       name: this.newgroupForm.get("txtName").value,
       bio: this.newgroupForm.get("txtBio").value,
-      admin: localStorage.getItem('id')
+      admin: localStorage.getItem('id'),
+      totals: 0,
+      membersCount: 1
     }
     this.services.spinner.show();
 

@@ -1,85 +1,109 @@
 import { ServicesUnit } from "../../../services/unit.services";
+import { IGroup, IGroupMember, IExpenses } from "../../../shared/interfaces";
+import { Observable } from "rxjs/observable";
+import { map } from "rxjs/operators";
 
 export class CloseModel {
 
-    expenses: any = []
+    expenses: any[];
 
     total: number = 0.0;
     dueAmount: number = 0.0;
     balances: any = [];
-    members: any = [];
-    isAdmin: boolean = false;
+    members: IGroupMember;
+    userId: string;
+
+    group: Observable<IGroup>;
 
     constructor(private services: ServicesUnit) {
-        this.loadExpenses()
-            .then(promises => {
+        this.userId = localStorage.getItem('id');
+        this.group = this.services.angularFirebaseService.getGroup(this.services.sharedData.groupId)
 
-                this.services.spinner.hide();
-                this.expenses = promises[0].json();
-                this.members = promises[1].json();
+        this.loadExpenses();
+    }
 
-                this.isAdmin = this.members.find(_ => _.id === localStorage.getItem('id') && _.isAdmin) ? true : false;
+    loadExpenses() {
+        this.services.spinner.show();
+        const groupId = this.services.sharedData.groupId;
 
-                this.expenses.forEach(exp => {
-                    exp.spentOn = new Date(exp.spentOn).toLocaleString();
-                    this.total += exp.amount;
+        this.group.subscribe(g => {
+            this.services.angularFirebaseService.getGroupMembers(groupId)
+                .subscribe(members => {
+
+                    this.dueAmount = g.totals / g.membersCount;
+
+                    this.balances = [];
+                    for (var mem in members) {
+                        this.expenses = [];
+                        this.services.spinner.show();
+                        const phone = mem;
+                        this.services.angularFirebaseService.getUserExpenses(groupId, phone)
+                            .subscribe(userExp => {
+                                if (userExp.length === 0) {
+                                    this.services.angularFirebaseService.getUser(phone)
+                                        .subscribe(user => {
+                                            this.balances.push({
+                                                id: phone,
+                                                name: user.name,
+                                                amount: -this.dueAmount
+                                            })
+                                        })
+                                }
+
+                                const userExpeneses = [];
+                                userExp.forEach(exp => {
+                                    const item = { id: phone, ref: exp.payload.doc.id, ...exp.payload.doc.data() }
+
+                                    if (this.expenses.findIndex(x => x.ref === item.ref) === -1) {
+                                        this.expenses.push(item);
+                                        userExpeneses.push(item);
+                                    }
+                                });
+                                userExpeneses.forEach(item => {
+                                    const index = this.balances.findIndex(x => x.id === item.id)
+                                    if (index > -1) {
+                                        this.balances[index].amount += item.amount;
+                                    }
+                                    else {
+                                        this.balances.push({
+                                            id: item.id,
+                                            name: item.name,
+                                            amount: item.amount - this.dueAmount
+                                        })
+                                    }
+                                });
+                                this.services.spinner.hide();
+                            });
+                    }
+
+                    this.services.spinner.hide();
                 });
-                if (this.members.length > 0) {
-                    this.dueAmount = this.total / this.members.length;
-                    this.members.forEach(member => {
-                        const m_balances = this.expenses.filter(_ => _.userId === member.id);
-                        const _paidAmount = (m_balances.map(_ => _.amount).reduce((acc, cur) => acc + cur)).toFixed(3);
 
-                        this.balances.push({
-                            'name': member.name,
-                            'userId': member.id,
-                            'dueAmount': this.dueAmount,
-                            'paidAmount': _paidAmount,
-                            'amount': (_paidAmount - this.dueAmount).toFixed(3),
-                            'closingDate': new Date()
-                        });
-                    });
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                this.services.spinner.hide();
-            });
+        });
     }
-
-    loadExpenses(): Promise<any> {
-        this.services.spinner.show();
-        const promises = [];
-        promises.push(this.services.firebaseFunctions.getGroupExpenses(this.services.sharedData.groupId));
-
-        promises.push(this.services.firebaseFunctions.getGroupMembers(this.services.sharedData.groupId));
-
-        return Promise.all(promises);
-    }
-
     close() {
-        this.services.spinner.show();
+        // this.services.spinner.show();
 
-        const expensesIds = this.expenses.map(_ => _.expenseId);
+        // const expensesIds = this.expenses.map(_ => _.expenseId);
 
-        const close = {
-            'groupId': this.services.sharedData.groupId,
-            'totalAmount': this.total,
-            'expensesIds': expensesIds,
-            'balances': this.balances,
-            'closeDate': new Date()
-        }
+        // const close = {
+        //     'groupId': this.services.sharedData.groupId,
+        //     'totalAmount': this.total,
+        //     'expensesIds': expensesIds,
+        //     'balances': this.balances,
+        //     'closeDate': new Date()
+        // }
 
-        this.services.firebaseFunctions.closeExpenses(close)
-            .then(_ => {
-                this.services.spinner.hide();
-                this.services.route.navigate(['/expenses'])
-                this.services.toastrSevice.success('opened expeneses are closed succeffully');
-            })
-            .catch(error => {
-                this.services.spinner.hide();
-                this.services.toastrSevice.error('error : not closed');
-                console.log(error);
-            });
+        // this.services.firebaseFunctions.closeExpenses(close)
+        //     .then(_ => {
+        //         this.services.spinner.hide();
+        //         this.services.route.navigate(['/expenses'])
+        //         this.services.toastrSevice.success('opened expeneses are closed succeffully');
+        //     })
+        //     .catch(error => {
+        //         this.services.spinner.hide();
+        //         this.services.toastrSevice.error('error : not closed');
+        //         console.log(error);
+        //     });
     }
 }

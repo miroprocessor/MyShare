@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference, DocumentChangeAction, DocumentSnapshot, Action } from "angularfire2/firestore";
-import { INeed, IUser, IGroup, IGroupMember } from "../shared/interfaces";
+import { INeed, IUser, IGroup, IGroupMember, IExpenses } from "../shared/interfaces";
 import { Observable } from "rxjs";
 import { firestore } from "firebase";
 
@@ -46,18 +46,17 @@ export class AngularFirebaseService {
             });
     }
 
-    userGroups(userId: string): Promise<firebase.firestore.QuerySnapshot> {
-        return this.db.collection('members')
-            .ref
-            .where('' + userId + '', '==', true)
-            .get();
+    getUserGroups(userId: string): Observable<DocumentChangeAction<{}>[]> {
+        return this.db.collection('members',
+            ref => ref.where('' + userId + '', '==', true))
+            .snapshotChanges();
     }
 
     getGroup(groupId: string): Observable<IGroup> {
         return this.db.doc<IGroup>('groups/' + groupId).valueChanges();
     }
 
-    groupMembers(groupId: string): Observable<IGroupMember> {
+    getGroupMembers(groupId: string): Observable<IGroupMember> {
         return this.db.doc<IGroupMember>('members/' + groupId).valueChanges();
     }
 
@@ -67,7 +66,7 @@ export class AngularFirebaseService {
             .add(need);
     }
 
-    groupNeeds(groupId: string): Observable<DocumentChangeAction<INeed>[]> {
+    getGroupNeeds(groupId: string): Observable<DocumentChangeAction<INeed>[]> {
         return this.db.doc('groups/' + groupId)
             .collection<INeed>('needs')
             .snapshotChanges()
@@ -90,11 +89,6 @@ export class AngularFirebaseService {
             .delete();
     }
 
-    invite(groupId: string, memberPhone: string): Promise<void> {
-        return this.db.collection('invitations').doc(groupId)
-            .set({ [memberPhone]: true });
-    }
-
     getInvitations(userId: string): Observable<DocumentChangeAction<{}>[]> {
         return this.db.collection('invitations',
             ref =>
@@ -102,15 +96,42 @@ export class AngularFirebaseService {
             .snapshotChanges();
     }
 
+    sendInvitation(groupId: string, memberPhone: string): Promise<void> {
+        return this.db.doc('invitations/' + groupId).ref.get().then(docRef => {
+            if (docRef.exists) {
+                return this.db.collection('invitations').doc(groupId)
+                    .update({ [memberPhone]: true });
+            }
+            else {
+                return this.db.collection('invitations').doc(groupId)
+                    .set({ [memberPhone]: true });
+            }
+        })
+
+
+    }
+
     getGroupInvitations(groupId: string): Observable<Action<DocumentSnapshot<{}>>> {
         return this.db.doc('invitations/' + groupId).snapshotChanges();
     }
 
     acceptInvitation(groupId: string, userId: string): Promise<void> {
-        return this.db.doc('members/' + groupId).update({ [userId]: true })
+        return this.db.doc('members/' + groupId)
+            .update({ [userId]: true })
             .then(_ => {
                 return this.db.doc('invitations/' + groupId)
-                    .update({ [userId]: firestore.FieldValue.delete() });
+                    .update({ [userId]: firestore.FieldValue.delete() })
+                    .then(() => {
+                        const groupDoc = this.db.doc('groups/' + groupId).ref;
+
+                        return this.db.firestore.runTransaction(transaction => {
+                            return transaction
+                                .get(groupDoc)
+                                .then(groupRef => {
+                                    transaction.update(groupDoc, { 'membersCount': groupRef.data().membersCount + 1 });
+                                });
+                        });
+                    });
             })
             .catch(() => {
                 return Promise.reject(null)
@@ -120,5 +141,27 @@ export class AngularFirebaseService {
     rejectInvitation(groupId: string, userId: string): Promise<void> {
         return this.db.doc('invitations/' + groupId)
             .update({ [userId]: false });
+    }
+
+    addExpenses(groupId: string, userId: string, expenses: IExpenses): Promise<void> {
+        return this.db.collection<IExpenses>('expenditures/' + groupId + '/' + userId)
+            .add(expenses)
+            .then(() => {
+                const groupDoc = this.db.doc('groups/' + groupId).ref;
+
+                return this.db.firestore.runTransaction(transaction => {
+                    return transaction
+                        .get(groupDoc)
+                        .then(groupRef => {
+                            transaction.update(groupDoc, { 'totals': groupRef.data().totals + expenses.amount });
+                        });
+                });
+            })
+    }
+
+    getUserExpenses(groupId: string, userId: string): Observable<DocumentChangeAction<IExpenses>[]> {
+        return this.db.collection<IExpenses>('expenditures/' + groupId + '/' + userId,
+            ref => ref.where('isClosed', '==', false))
+            .snapshotChanges();
     }
 }

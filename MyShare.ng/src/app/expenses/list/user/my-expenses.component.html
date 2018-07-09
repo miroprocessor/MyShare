@@ -9,25 +9,29 @@
 <div class="main-content">
   <div class="row">
     <div class="col-md-12">
-        <div class="alert alert-warning text-center" *ngIf="model.groups.length === 0">
-            You don't have opened expenses
-          </div>
+      <div class="alert alert-warning text-center" *ngIf="model.noExpenses">
+        You don't have opened expenses
+      </div>
       <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor='let group of model.groups'>
         <ngb-panel title="{{group.name}}">
           <ng-template ngbPanelContent>
-            <table class="table">
+            <table class="table" *ngIf="group.expenses.length > 0">
               <tr>
                 <th>Amount</th>
                 <th>Details</th>
                 <th>Date</th>
               </tr>
               <tr *ngFor='let expense of group.expenses'>
-                <td>{{expense.amount}}</td>
+                <td>{{expense.amount|number:"0.3"}}</td>
                 <td>{{expense.details}}</td>
-                <td>{{expense.spentOn}}</td>
+                <td>{{expense.spentOn.seconds*1000|date:"dd/MM/yyyy"}}</td>
               </tr>
             </table>
-            <button *ngIf="group.isAdmin" style="float: right;" class="btn btn-primary btn-round btn-sm" (click)="onClose(group.id,group.name,group.bio)">Close</button>
+            <div class="alert alert-info" *ngIf="group.expenses.length === 0">
+              you spent nothing :)
+            </div>
+            <button *ngIf="group.admin === model.userId && group.totals > 0" style="float: right;" class="btn btn-primary btn-round btn-sm"
+              (click)="onClose(group.id,group.name,group.bio)">Close</button>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>

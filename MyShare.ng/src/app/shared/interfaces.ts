@@ -16,9 +16,9 @@ export interface IInvitationModel {
 export interface IExpenses {
     amount: number,
     details: string,
-    userId: string,
-    groupId: string,
-    spentOn: Date
+    spentOn: Date,
+    isClosed: boolean,
+    name: string
 }
 
 export interface INeed {
@@ -40,10 +40,17 @@ export interface IUserFull extends IUser {
 export interface IGroup {
     name: string,
     bio: string,
-    admin: string
+    admin: string,
+    totals: number,
+    membersCount: number
 }
+
 export interface IGroupFull extends IGroup {
     id: string
+}
+
+export interface IGroupExpenses extends IGroupFull {
+    expenses: IExpenses[]
 }
 
 export interface IGroupMember {

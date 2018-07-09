@@ -1,6 +1,5 @@
 import { ServicesUnit } from "../../services/unit.services";
 import { IUserFull } from "../../shared/interfaces";
-import { Observable } from "rxjs";
 
 export class GroupDetailsModel {
 
@@ -29,7 +28,7 @@ export class GroupDetailsModel {
                 this.isAdmin = group.admin === localStorage.getItem('id');
 
                 this._bio = group.bio;
-                this.services.angularFirebaseService.groupMembers(this._groupId)
+                this.services.angularFirebaseService.getGroupMembers(this._groupId)
                     .subscribe(groupMembers => {
                         this.participantsCount = Object.keys(groupMembers).length;
                         this.members = []

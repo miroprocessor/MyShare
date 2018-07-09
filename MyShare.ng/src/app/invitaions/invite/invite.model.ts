@@ -22,7 +22,7 @@ export class InviteModel {
 
     private sendInvitation(memberPhone: string, modalRef?: NgbModalRef) {
         this.services.spinner.show();
-        this.services.angularFirebaseService.invite(this.services.sharedData.groupId, memberPhone)
+        this.services.angularFirebaseService.sendInvitation(this.services.sharedData.groupId, memberPhone)
             .then(() => {
                 this.services.toastrSevice.success("your invitation has been sent successfully");
                 if (modalRef) {
@@ -30,7 +30,7 @@ export class InviteModel {
                 }
                 this.services.spinner.hide();
             })
-            .catch(() => {
+            .catch((error) => {
                 this.services.toastrSevice.error('error while sending your invitation');
                 this.services.spinner.hide();
             })
@@ -45,7 +45,7 @@ export class InviteModel {
         }
 
         const getMembers = (groupId, memberPhone) => {
-            const members = this.services.angularFirebaseService.groupMembers(groupId);
+            const members = this.services.angularFirebaseService.getGroupMembers(groupId);
             return members;
         }
 
