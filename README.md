@@ -16,10 +16,6 @@ Thanks for [Creative Tim](https://www.creative-tim.com/), I used [Now UI Dashboa
 # Installation
 
 1. Clone the full repository.
-2. Open **MyShare.firebase/.firebaserc**
-3. Set value of **defualt** property with your firebase project name.  _if you don't have firebase project [here you can get started](https://firebase.google.com/docs/web/setup)_
-4. Deploy firebase functions to your firebase project. _if you don't have firebase function [here you can get started](https://firebase.google.com/docs/functions/get-started)_
-5. Open **MyShare.ng/src/environments/environment.< prod >.ts**
-6. Set value of **fireFunctionsUrl** property with your firebase functions root url. _you can get it from output of step 4_ 
-7. Set value of **firebase** properties with your firebase project configrations. _[here you can get started](https://firebase.google.com/docs/web/setup)_
-7. Build your project and test it. 
+2. Open **MyShare.ng/src/environments/environment.< prod >.ts**
+3. Set value of **firebase** properties with your firebase project configrations. _[here you can get started](https://firebase.google.com/docs/web/setup)_
+4. Build your project and test it. 
