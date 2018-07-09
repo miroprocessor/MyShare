@@ -5,7 +5,7 @@ Track your and your roommates expenses and calculate the share of each member.
 
 - Angular v6.0
 - Firebase Database
-- Firebase Functions
+- Firebase Functions **(deprecated)**
 - [angularfire2](https://github.com/angular/angularfire2)
 - Service Worker & manifest (PWA).
 
