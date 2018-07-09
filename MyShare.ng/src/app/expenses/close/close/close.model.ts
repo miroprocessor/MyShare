@@ -1,11 +1,11 @@
 import { ServicesUnit } from "../../../services/unit.services";
-import { IGroup, IGroupMember, IExpenses } from "../../../shared/interfaces";
+import { IGroup, IGroupMember, IExpensesFull } from "../../../shared/interfaces";
 import { Observable } from "rxjs/observable";
 import { map } from "rxjs/operators";
 
 export class CloseModel {
 
-    expenses: any[];
+    expenses: IExpensesFull[];
 
     total: number = 0.0;
     dueAmount: number = 0.0;
@@ -31,7 +31,7 @@ export class CloseModel {
                 .subscribe(members => {
 
                     this.dueAmount = g.totals / g.membersCount;
-
+                    this.total = g.totals;
                     this.balances = [];
                     for (var mem in members) {
                         this.expenses = [];
@@ -82,28 +82,16 @@ export class CloseModel {
         });
     }
     close() {
-        // this.services.spinner.show();
+        this.services.spinner.show();
 
-        // const expensesIds = this.expenses.map(_ => _.expenseId);
-
-        // const close = {
-        //     'groupId': this.services.sharedData.groupId,
-        //     'totalAmount': this.total,
-        //     'expensesIds': expensesIds,
-        //     'balances': this.balances,
-        //     'closeDate': new Date()
-        // }
-
-        // this.services.firebaseFunctions.closeExpenses(close)
-        //     .then(_ => {
-        //         this.services.spinner.hide();
-        //         this.services.route.navigate(['/expenses'])
-        //         this.services.toastrSevice.success('opened expeneses are closed succeffully');
-        //     })
-        //     .catch(error => {
-        //         this.services.spinner.hide();
-        //         this.services.toastrSevice.error('error : not closed');
-        //         console.log(error);
-        //     });
+        this.services.angularFirebaseService.closeExpenses(this.services.sharedData.groupId, this.total, this.expenses)
+            .then(() => {
+                this.services.spinner.hide();
+                this.services.toastrSevice.success('closing process completed successfully');
+            })
+            .catch(() => {
+                this.services.spinner.hide();
+                this.services.toastrSevice.error('Error : closing process not completed');
+            })
     }
 }

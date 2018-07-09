@@ -21,6 +21,11 @@ export interface IExpenses {
     name: string
 }
 
+export interface IExpensesFull {
+    id: string,
+    ref: string
+}
+
 export interface INeed {
     quantity: number,
     description: string,

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference, DocumentChangeAction, DocumentSnapshot, Action } from "angularfire2/firestore";
-import { INeed, IUser, IGroup, IGroupMember, IExpenses } from "../shared/interfaces";
+import { INeed, IUser, IGroup, IGroupMember, IExpenses, IExpensesFull } from "../shared/interfaces";
 import { Observable } from "rxjs";
 import { firestore } from "firebase";
 
@@ -163,5 +163,22 @@ export class AngularFirebaseService {
         return this.db.collection<IExpenses>('expenditures/' + groupId + '/' + userId,
             ref => ref.where('isClosed', '==', false))
             .snapshotChanges();
+    }
+
+    closeExpenses(groupId: string, totals: number, expenses: IExpensesFull[]): Promise<void> {
+        const batch = this.db.firestore.batch();
+        const closeId = this.db.createId();
+
+        expenses.forEach(exp => {
+            const expRef = this.db.doc('expenditures/' + groupId + '/' + exp.id + '/' + exp.ref).ref;
+            batch.update(expRef, { isClosed: true, closeId: closeId });
+        });
+        const groupRef = this.db.doc('groups/' + groupId).ref;
+        batch.update(groupRef, { totals: 0 });
+
+
+        const closeRef = this.db.doc('closures/' + groupId + '/closes/' + closeId).ref;
+        batch.set(closeRef, { totals: totals, closedOn: new Date() });
+        return batch.commit();
     }
 }
