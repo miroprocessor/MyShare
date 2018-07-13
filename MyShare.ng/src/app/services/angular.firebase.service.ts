@@ -1,8 +1,11 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference, DocumentChangeAction, DocumentSnapshot, Action } from "angularfire2/firestore";
+
 import { INeed, IUser, IGroup, IGroupMember, IExpenses, IExpensesFull } from "../shared/interfaces";
 import { Observable } from "rxjs";
 import { firestore } from "firebase";
+import * as firebase from "firebase";
+import { FirebaseOptionsToken } from "../../../node_modules/angularfire2";
 
 @Injectable({ providedIn: 'root' })
 export class AngularFirebaseService {
@@ -10,27 +13,13 @@ export class AngularFirebaseService {
     constructor(private db: AngularFirestore) {
     }
 
-    register(phone: string, user: IUser): Promise<boolean> {
-        return this.db.firestore.doc('users/' + phone)
-            .get()
-            .then(_ => {
-                if (!_.exists) {
-                    return this.db.collection<IUser>('users').doc(phone)
-                        .set({
-                            'name': user.name,
-                            'password': user.password
-                        })
-                }
-                else {
-                    return Promise.reject(false);
-                }
-            })
-            .then(() => {
-                return true;
-            })
-            .catch((reason): boolean => {
-                return false; // to stop continue in case of register new user
-            });
+
+    addUser(userId: string, user: IUser): Promise<void> {
+        return this.db.collection<IUser>('users').doc(userId).set({ name: user.name })
+    }
+
+    login(phone: string, recaptchaVerifier: firebase.auth.ApplicationVerifier): Promise<firebase.auth.ConfirmationResult> {
+        return firebase.auth().signInWithPhoneNumber(phone, recaptchaVerifier)
     }
 
     getUser(phone: string): Observable<IUser> {

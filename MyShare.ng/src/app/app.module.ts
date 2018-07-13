@@ -22,6 +22,7 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NewNeedComponent } from './needs/add/new-need/new-need.component';
 import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.component';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 
 
@@ -41,7 +42,8 @@ import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.com
     }),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence()
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireAuthModule
   ],
   declarations: [
     AppComponent,

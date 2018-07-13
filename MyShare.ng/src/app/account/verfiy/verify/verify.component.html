@@ -1,0 +1,28 @@
+<div class="wrapper wrapper-full-page">
+  <div class="full-page login-page">
+    <div class="content">
+      <div class="container">
+        <div class="row" *ngIf="!showVerification">
+          <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+            <form [formGroup]="verifyForm" (ngSubmit)="onVerfiy()">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Verify your phone!</h3>
+                </div>
+                <div class="card-content">
+                  <div class="form-group">
+                    <label>Code</label>
+                    <input type="text" class="form-control input-no-border" formControlName="txtCode" placeholder="code" />
+                  </div>
+                </div>
+                <div class="card-footer text-center">
+                  <button type="submit" class="btn btn-primary btn-round btn-sm" [disabled]="!verifyForm.valid">Verify</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

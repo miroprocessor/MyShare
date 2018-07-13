@@ -33,8 +33,7 @@ export interface INeed {
 }
 
 export interface IUser {
-    name: string,
-    password: string
+    name: string
 }
 
 export interface IUserFull extends IUser {

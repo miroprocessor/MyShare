@@ -1,7 +1,6 @@
 import { ServicesUnit } from "../../../services/unit.services";
 import { IGroup, IGroupMember, IExpensesFull } from "../../../shared/interfaces";
-import { Observable } from "rxjs/observable";
-import { map } from "rxjs/operators";
+import { Observable } from "rxjs/Observable";
 
 export class CloseModel {
 
