@@ -41,6 +41,7 @@ export class VerifyComponent implements OnInit {
         }
         this.services.angularFirebaseService.addUser(result.user.uid, user)
           .then(() => {
+            localStorage.setItem('name', this.loginService.name)
             this.services.authGuard.isAuthorized.next(true);
             this.services.toastrSevice.success('you logged in!');
             this.services.route.navigate(['/']);
