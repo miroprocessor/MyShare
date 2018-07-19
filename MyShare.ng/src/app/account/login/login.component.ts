@@ -26,10 +26,10 @@ export class LoginComponent implements OnInit {
       'txtName': new FormControl(null, Validators.required)
     });
 
-      this.windowRef = this.loginService.getWindow();
+    this.windowRef = this.loginService.getWindow();
 
-      this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-    
+    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+
     this.windowRef.recaptchaVerifier.render();
 
   }
@@ -44,9 +44,9 @@ export class LoginComponent implements OnInit {
       .then(result => {
         this.services.spinner.hide();
         this.loginService.confirmationResult = result;
-        this.loginService.name = name;
+        this.loginService.user = { name: name, phone: phone };
         this.services.toastrSevice.success('we have sent a verfication code to your phone.');
-        
+
         this.services.route.navigate(['/account/verify'])
 
       })

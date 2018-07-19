@@ -10,7 +10,7 @@ exports.invite = (request, response) => {
         .get()
         .then(userRef => {
         if (userRef.docs.length === 0) {
-            response.status(200).send('1000');
+            response.status(200).send('1000'); // phone number is not registered
         }
         else {
             const user = userRef.docs[0];
@@ -21,7 +21,7 @@ exports.invite = (request, response) => {
                 if (invsRef.docs.filter((element, index, array) => {
                     return element.data().userId === user.id && element.data().groupId === invitation.groupId;
                 }).length > 0) {
-                    response.status(200).send('2000');
+                    response.status(200).send('2000'); // user has been invited before.
                 }
                 else {
                     db.collection('invitations')

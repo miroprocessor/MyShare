@@ -29,11 +29,13 @@ export interface IExpensesFull {
 export interface INeed {
     quantity: number,
     description: string,
-    votes: number
+    votes: number,
+    userId: string
 }
 
 export interface IUser {
-    name: string
+    name: string,
+    phone: string
 }
 
 export interface IUserFull extends IUser {

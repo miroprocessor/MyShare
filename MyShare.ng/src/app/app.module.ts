@@ -23,6 +23,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NewNeedComponent } from './needs/add/new-need/new-need.component';
 import { GroupsNeedsComponent } from './needs/list/groups-needs/groups-needs.component';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { MessagingService } from './services/messaging.service';
 
 
 
@@ -61,4 +62,10 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private messagingService: MessagingService) {
+
+    messagingService.getPermission();
+    messagingService.receiveMessage();
+  }
+}

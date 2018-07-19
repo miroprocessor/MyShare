@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = require("firebase-admin");
-//import { groupMembers } from '.';
 const db = admin.firestore();
 exports.userExpenses = (request, response) => {
     response.setHeader('access-control-allow-origin', '*');

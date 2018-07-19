@@ -14,8 +14,8 @@ export class AngularFirebaseService {
     }
 
 
-    addUser(userId: string, user: IUser): Promise<void> {
-        return this.db.collection<IUser>('users').doc(userId).set({ name: user.name })
+    addUser(user: IUser): Promise<void> {
+        return this.db.collection<IUser>('users').doc(user.phone).set({ name: user.name })
     }
 
     login(phone: string, recaptchaVerifier: firebase.auth.ApplicationVerifier): Promise<firebase.auth.ConfirmationResult> {
@@ -169,5 +169,10 @@ export class AngularFirebaseService {
         const closeRef = this.db.doc('closures/' + groupId + '/closes/' + closeId).ref;
         batch.set(closeRef, { totals: totals, closedOn: new Date() });
         return batch.commit();
+    }
+
+    updateMessagingToken(userId: string, token: string): Promise<void> {
+        return this.db.collection('tokens').doc(userId)
+            .set({ token: token });
     }
 }

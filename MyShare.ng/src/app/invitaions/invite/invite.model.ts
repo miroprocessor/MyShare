@@ -44,7 +44,7 @@ export class InviteModel {
             return user;
         }
 
-        const getMembers = (groupId, memberPhone) => {
+        const getMembers = (groupId) => {
             const members = this.services.angularFirebaseService.getGroupMembers(groupId);
             return members;
         }
@@ -57,11 +57,11 @@ export class InviteModel {
         getUser(memberPhone)
             .subscribe(user => {
                 if (user) {
-                    getMembers(groupId, memberPhone)
+                    getMembers(groupId)
                         .subscribe(GroupMember => {
                             let canSend: boolean = true;
-                            for (var phone in GroupMember) {
-                                if (phone === memberPhone) {
+                            for (var userId in GroupMember) {
+                                if (userId === memberPhone) {
                                     canSend = false;
                                 }
                             }

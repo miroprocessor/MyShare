@@ -30,7 +30,8 @@ export class NewNeedComponent implements OnInit {
     const need: INeed = {
       description: this.needsForm.get("txtDescription").value,
       quantity: this.needsForm.get("txtQuantity").value,
-      votes: 1
+      votes: 1,
+      userId:localStorage.getItem('id')
     }
     this.model.addNeed(this.needsForm.get("ddlGroups").value, need, () => {
       this.needsForm.reset();
