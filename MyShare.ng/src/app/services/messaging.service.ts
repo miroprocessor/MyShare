@@ -39,6 +39,7 @@ export class MessagingService {
 
   receiveMessage() {
     this.messaging.onMessage((payload) => {
+      console.log(payload.notification)
       this.services.toastrSevice.info(payload.notification.title);
       this.currentMessage.next(payload)
     });

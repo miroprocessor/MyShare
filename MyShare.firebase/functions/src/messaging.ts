@@ -4,12 +4,9 @@ import { DocumentSnapshot } from '../node_modules/firebase-functions/lib/provide
 
 const db = admin.firestore();
 
-export const needsNotification = (snap: DocumentSnapshot, context: functions.EventContext): any => {
+export const needsNotification = (snap: DocumentSnapshot, context: functions.EventContext): Promise<void> => {
     const groupId = context.params.groupId;
-    const needId = context.params.needId;
     const need = snap.data();
-
-    console.log('new need', need);
 
     return db.doc('groups/' + groupId)
         .get()
@@ -21,18 +18,14 @@ export const needsNotification = (snap: DocumentSnapshot, context: functions.Eve
                     body: need.quantity + ' ' + need.description,
                     click_action: 'http://localhost:4200/needs'
                 }
-
             }
             db.doc('members/' + groupId)
                 .get()
                 .then(memberRef => {
-
-
                     const tokensPromises = []
-                    for (let member in memberRef.data()) {
+                    for (const member in memberRef.data()) {
                         const userId = member;
-
-                        if (need.userId != userId) {// don't notify sender
+                        if (need.userId !== userId) {// don't notify sender
                             tokensPromises.push(db.doc('tokens/' + userId).get());
                         }
                     }
@@ -40,11 +33,9 @@ export const needsNotification = (snap: DocumentSnapshot, context: functions.Eve
                 })
                 .then(tokensSnaps => {
                     const tokens = [];
-                    console.log('tokensSnaps', tokensSnaps);
                     tokensSnaps.forEach(tokenSnap => {
                         tokens.push(tokenSnap.data().token);
                     });
-                    console.log(tokens);
                     return admin.messaging().sendToDevice(tokens, payload)
                 });
         })
@@ -53,3 +44,62 @@ export const needsNotification = (snap: DocumentSnapshot, context: functions.Eve
         });
 };
 
+export const invitationNotification = (beforeSnap: DocumentSnapshot, afterSnap: DocumentSnapshot, context: functions.EventContext): Promise<any> => {
+
+    const groupId = context.params.groupId;
+    const invitation = afterSnap.data();
+
+
+    const phonesBefore = [];
+    const phonesAfter = [];
+
+    if (beforeSnap.data()) {
+        for (const phone in beforeSnap.data()) {
+            phonesBefore.push(phone);
+        }
+    }
+
+    for (const phone in afterSnap.data()) {
+        phonesAfter.push(phone);
+    }
+
+    const phonesToNotify = [];
+
+    phonesAfter.forEach(phone => {
+        if (phonesBefore.findIndex(item => item === phone) === -1 && invitation[phone] === true) {
+            phonesToNotify.push(phone);
+        }
+    })
+
+    if (phonesToNotify.length > 0) {
+
+        let payload: any;
+        return db.doc('groups/' + groupId)
+            .get()
+            .then(groupSnapShot => {
+                const group = groupSnapShot.data();
+                payload = {
+                    notification: {
+                        title: 'new invitation',
+                        body: 'you have been invited to join ' + group.name,
+                        click_action: 'http://localhost:4200/invitations'
+                    }
+                };
+                const tokensPromises = [];
+                for (const phone in invitation) {
+                    tokensPromises.push(db.doc('tokens/' + phone).get());
+                }
+                return Promise.all(tokensPromises);
+            })
+            .then(tokensSnaps => {
+                const tokens = [];
+                tokensSnaps.forEach(tokenSnap => {
+                    tokens.push(tokenSnap.data().token);
+                });                
+                return admin.messaging().sendToDevice(tokens, payload)
+            });
+    }
+    else {
+        return null;
+    }
+};
