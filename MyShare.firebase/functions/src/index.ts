@@ -14,4 +14,13 @@ export const invitationNotification = functions.firestore.document('/invitations
     .onWrite((change, context): any => {
         return messaging.invitationNotification(change.before, change.after, context);
     });
-    
+
+export const newGroupMember = functions.firestore.document('members/{groupId}')
+    .onWrite((change, context): any => {
+        return messaging.newGroupMember(change.after, context);
+    });
+
+export const closing = functions.firestore.document('closures/{groupId}/closes/{closeId}')
+    .onCreate((snapshot, context): any => {
+        return messaging.closing(context);
+    });

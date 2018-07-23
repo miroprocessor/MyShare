@@ -12,4 +12,12 @@ exports.invitationNotification = functions.firestore.document('/invitations/{gro
     .onWrite((change, context) => {
     return messaging.invitationNotification(change.before, change.after, context);
 });
+exports.newGroupMember = functions.firestore.document('members/{groupId}')
+    .onWrite((change, context) => {
+    return messaging.newGroupMember(change.after, context);
+});
+exports.closing = functions.firestore.document('closures/{groupId}/closes/{closeId}')
+    .onCreate((snapshot, context) => {
+    return messaging.closing(context);
+});
 //# sourceMappingURL=index.js.map

@@ -41,6 +41,7 @@ export const needsNotification = (snap: DocumentSnapshot, context: functions.Eve
         })
         .catch(error => {
             console.log(error);
+            return null;
         });
 };
 
@@ -95,11 +96,90 @@ export const invitationNotification = (beforeSnap: DocumentSnapshot, afterSnap: 
                 const tokens = [];
                 tokensSnaps.forEach(tokenSnap => {
                     tokens.push(tokenSnap.data().token);
-                });                
+                });
                 return admin.messaging().sendToDevice(tokens, payload)
             });
     }
     else {
         return null;
     }
+};
+
+export const newGroupMember = (afterSnap: DocumentSnapshot, context: functions.EventContext): Promise<any> => {
+
+    const groupId = context.params.groupId;
+    const members = afterSnap.data();
+
+    const phones = [];
+    for (const phone in members) {
+        phones.push(phone);
+    }
+    let payload: any;
+    return db.doc('groups/' + groupId)
+        .get()
+        .then(groupRef => {
+            const group = groupRef.data();
+            payload = {
+                notification: {
+                    title: 'new member',
+                    body: 'new member have joined group ' + group.name,
+                    click_action: 'http://localhost:4200/groups'
+                }
+            };
+            const promises = [];
+            phones.forEach(phone => {
+                promises.push(db.doc('tokens/' + phone).get());
+            });
+            return Promise.all(promises);
+        })
+        .then(tokensRef => {
+            const tokens = []
+            tokensRef.forEach(tokenRef => {
+                tokens.push(tokenRef.data().token);
+            });
+
+            return admin.messaging().sendToDevice(tokens, payload)
+        })
+        .catch(error => {
+            console.log(error);
+            return null;
+        });
+};
+
+export const closing = (context: functions.EventContext): Promise<void> => {
+    const groupId = context.params.groupId;
+
+    return db.doc('groups/' + groupId)
+        .get()
+        .then(groupRef => {
+            const group = groupRef.data();
+            const payload = {
+                notification: {
+                    title: 'new close',
+                    body: 'expenses of ' + group.name + ' are closed',
+                    click_action: 'http://localhost:4200/groups'
+                }
+            }
+            db.doc('members/' + groupId)
+                .get()
+                .then(memberRef => {
+                    const tokensPromises = []
+                    for (const member in memberRef.data()) {
+                        const userId = member;
+                        tokensPromises.push(db.doc('tokens/' + userId).get());
+                    }
+                    return Promise.all(tokensPromises)
+                })
+                .then(tokensSnaps => {
+                    const tokens = [];
+                    tokensSnaps.forEach(tokenSnap => {
+                        tokens.push(tokenSnap.data().token);
+                    });
+                    return admin.messaging().sendToDevice(tokens, payload)
+                });
+        })
+        .catch(error => {
+            console.log(error);
+            return null;
+        });
 };
