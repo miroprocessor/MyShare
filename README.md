@@ -18,4 +18,6 @@ Thanks for [Creative Tim](https://www.creative-tim.com/), I used [Now UI Dashboa
 1. Clone the full repository.
 2. Open **MyShare.ng/src/environments/environment.< prod >.ts**
 3. Set value of **firebase** properties with your firebase project configrations. _[here you can get started](https://firebase.google.com/docs/web/setup)_
-4. Build your project and test it. 
+4. Open **MyShare.firebase/.firebaserc**
+5. Set value of **default** with your firebase project name.
+6. Build your project and test it. 
