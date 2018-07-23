@@ -2,8 +2,9 @@
 Track your and your roommates expenses and calculate the share of each member.
 
 # Disclaimer
-The main purpose of this application is sharpen my Angular skills and learn firebase.
-**Don't use it in prodcution**
+The main purpose of this application is sharpen my Angular skills and learn firebase.    
+     
+_**Don't use it in prodcution**_
 
 
 # Features
