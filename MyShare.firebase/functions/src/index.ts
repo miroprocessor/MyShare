@@ -24,3 +24,9 @@ export const closing = functions.firestore.document('closures/{groupId}/closes/{
     .onCreate((snapshot, context): any => {
         return messaging.closing(context);
     });
+
+export const newExpenses = functions.firestore.document('expenditures/{groupId}/{userPhone}/{expensesId}')
+    .onCreate((snapshot, context): any => {
+        console.log('new expenses')
+        return messaging.newExpenses(snapshot, context);
+    });

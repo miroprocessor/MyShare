@@ -183,3 +183,45 @@ export const closing = (context: functions.EventContext): Promise<void> => {
             return null;
         });
 };
+
+export const newExpenses = (snap: DocumentSnapshot, context: functions.EventContext): Promise<void> => {
+    const groupId = context.params.groupId;
+    const userPhone = context.params.userPhone;
+    const expenses = snap.data();
+
+    return db.doc('groups/' + groupId)
+        .get()
+        .then(groupRef => {
+            const group = groupRef.data();
+            const payload = {
+                notification: {
+                    title: 'new expenses is added for group ' + group.name,
+                    body: expenses.amount + ' for ' + expenses.details,
+                    click_action: 'http://localhost:4200/groups'
+                }
+            }
+            db.doc('members/' + groupId)
+                .get()
+                .then(memberRef => {
+                    const tokensPromises = []
+                    for (const member in memberRef.data()) {
+                        const userId = member;
+                        if (userPhone !== userId) {// don't notify sender
+                            tokensPromises.push(db.doc('tokens/' + userId).get());
+                        }
+                    }
+                    return Promise.all(tokensPromises)
+                })
+                .then(tokensSnaps => {
+                    const tokens = [];
+                    tokensSnaps.forEach(tokenSnap => {
+                        tokens.push(tokenSnap.data().token);
+                    });
+                    return admin.messaging().sendToDevice(tokens, payload)
+                });
+        })
+        .catch(error => {
+            console.log(error);
+            return null;
+        });
+};

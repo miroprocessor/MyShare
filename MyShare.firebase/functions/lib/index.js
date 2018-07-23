@@ -20,4 +20,9 @@ exports.closing = functions.firestore.document('closures/{groupId}/closes/{close
     .onCreate((snapshot, context) => {
     return messaging.closing(context);
 });
+exports.newExpenses = functions.firestore.document('expenditures/{groupId}/{userPhone}/{expensesId}')
+    .onCreate((snapshot, context) => {
+    console.log('new expenses');
+    return messaging.newExpenses(snapshot, context);
+});
 //# sourceMappingURL=index.js.map
