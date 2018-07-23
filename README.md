@@ -1,6 +1,23 @@
 # MyShare
 Track your and your roommates expenses and calculate the share of each member.
 
+# Purpose
+The main purpose of this application is sharpen my Angular skills and learn firebase.
+
+# Features
+- Login with your phone number.
+- Create group for your roommates.
+- Can join many groups.
+- Invite others to join your group.
+- Accept/reject invitations.
+- Add expenses to your groups.
+- Add group needs to be purchased.
+- Get notified when
+  - new needs are added.
+  - receive new invitation.
+  - new member joined your group.
+  - group admin closed the group opened expenses.
+
 # Tools
 
 - Angular v6.0
