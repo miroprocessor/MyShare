@@ -1,8 +1,10 @@
 # MyShare
 Track your and your roommates expenses and calculate the share of each member.
 
-# Purpose
+# Disclaimer
 The main purpose of this application is sharpen my Angular skills and learn firebase.
+**Don't use it in prodcution**
+
 
 # Features
 - Login with your phone number.
@@ -17,6 +19,7 @@ The main purpose of this application is sharpen my Angular skills and learn fire
   - receive new invitation.
   - new member joined your group.
   - group admin closed the group opened expenses.
+  - new expenses is added.
 
 # Tools
 
