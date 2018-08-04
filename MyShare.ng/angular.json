@@ -31,7 +31,8 @@
               "src/assets/demo/demo.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker":true
           },
           "configurations": {
             "production": {

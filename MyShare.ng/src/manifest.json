@@ -1,6 +1,6 @@
 {
-  "name": "my-expenses",
-  "short_name": "my-xp",
+  "name": "my-share",
+  "short_name": "my-sh",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

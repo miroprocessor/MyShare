@@ -28,7 +28,7 @@
   "dataGroups":[{
     "name":"userGroups",
     "urls":[
-      "https://us-central1-expenses-f5bc0.cloudfunctions.net/**"
+      "https://Your-app-domain/**"
     ],
     "cacheConfig":{
       "maxSize":10,
